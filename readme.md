@@ -48,9 +48,9 @@ Part stockholm syndrome. But also, if you dig into it, ACT is more than just a D
 - proper translation for monster names and skill names
 
 # Shoutouts
-- [AdvancedCombatTracker by EQAditu](https://advancedcombattracker.com/) (duh)
-- [Star Resonance Damage Counter by Dimole](https://github.com/dmlgzs/StarResonanceDamageCounter) I'm had zero network packet capture experience before starting this, most of the networking code is ported from that project
+- [AdvancedCombatTracker](https://advancedcombattracker.com/) by EQAditu - (duh)
+- [Star Resonance Damage Counter](https://github.com/dmlgzs/StarResonanceDamageCounter) by Dimole - I had zero network packet capture experience before starting this, most of the networking & packet handling code is ported from that project.
 - Used Nuget libraries
-	- [SharpPcap by Tamir Gal, Chris Morgan and others](https://www.nuget.org/packages/SharpPcap)
-	- [ZstdSharp.Port by Oleg Stepanischev](https://www.nuget.org/packages/ZstdSharp.Port)
-	- [AdvancedCombatTracker by bnVi](https://www.nuget.org/packages/AdvancedCombatTracker)
+	- [SharpPcap](https://www.nuget.org/packages/SharpPcap) by Tamir Gal, Chris Morgan and others
+	- [ZstdSharp.Port](https://www.nuget.org/packages/ZstdSharp.Port) by Oleg Stepanischev
+	- [AdvancedCombatTracker](https://www.nuget.org/packages/AdvancedCombatTracker) by bnVi
