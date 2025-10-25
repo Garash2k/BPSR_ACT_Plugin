@@ -1,0 +1,40 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net48</TargetFramework>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <Compile Remove="BPSR_ProtocolBuffer\**" />
+	  <EmbeddedResource Remove="BPSR_ProtocolBuffer\**" />
+	  <None Remove="BPSR_ProtocolBuffer\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="SharpPcap" Version="6.3.1" />
+	  <PackageReference Include="ZstdSharp.Port" Version="0.8.6" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\BPSR_ProtocolBuffer\BPSR_ProtocolBuffer.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Reference Include="System.Web.Extensions" />
+		<Reference Include="System.Windows.Forms" />
+		<Reference Include="Advanced Combat Tracker">
+			<HintPath>C:\Program Files (x86)\Advanced Combat Tracker\Advanced Combat Tracker.exe</HintPath>
+			<Private>False</Private>
+		</Reference>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="tables\monster_names_en.json">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="tables\skill_names_en.json">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+
+</Project>

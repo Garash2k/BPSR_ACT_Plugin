@@ -1,0 +1,322 @@
+syntax = "proto3";
+
+// Initially auto-generated skeleton from StarResonanceDamageCounter's protobuf.js static bundle (best-effort)
+// Stripped down to the minimum required to run BPSR_ACT_Plugin
+
+enum EDamageType {
+  Normal = 0;
+  Miss = 1;
+  Heal = 2;
+  Immune = 3;
+  Fall = 4;
+  Absorbed = 5;
+}
+
+message SyncNearDeltaInfo {
+  AoiSyncDelta DeltaInfos = 1;
+}
+
+message SyncToMeDeltaInfo {
+  AoiSyncToMeDelta DeltaInfo = 1;
+}
+
+message ActorBodyPartInfo {
+  int32 PartId = 1;
+  uint64 Hp = 2;
+  uint64 MaxHp = 3;
+  int32 State = 4;
+  int32 FleshyId = 5;
+}
+
+message ActorBodyPartInfos {
+  int64 Uuid = 1;
+  ActorBodyPartInfo Infos = 2;
+}
+
+message AoiSyncDelta {
+  int64 Uuid = 1;
+  AttrCollection Attrs = 2;
+  TempAttrCollection TempAttrs = 3;
+  EventDataList EventDataList = 4;
+  BulletEvent BulletEvent = 5;
+  ActorBodyPartInfos BodyPartInfos = 6;
+  SkillEffect SkillEffects = 7;
+  SeqPassiveSkillInfo PassiveSkillInfos = 8;
+  SeqPassiveSkillEndInfo PassiveSkillEndInfos = 9;
+  // Considered unnecessary
+  // BuffInfoSync BuffInfos = 10;
+  // BuffEffectSync BuffEffect = 11;
+  // FakeBulletInfo FakeBullets = 12;
+  // MagneticRideQueueChangeInfo MagneticRideQueueChangeInfoList = 13;
+}
+
+message AttrCollection {
+  int64 Uuid = 1;
+  Attr Attrs = 2;
+  MapAttr MapAttrs = 3;
+}
+
+message Attr {
+  int32 Id = 1;
+  bytes RawData = 2;
+}
+
+message MapAttr {
+  bool IsClear = 1;
+  int32 Id = 2;
+  MapAttrValue Attrs = 3;
+}
+
+message MapAttrValue {
+  bool IsRemove = 1;
+  bytes Key = 2;
+  bytes Value = 3;
+}
+
+message TempAttrCollection {
+  TempAttr Attrs = 1;
+}
+
+message TempAttr {
+  int32 Id = 1;
+  int32 Value = 2;
+}
+
+message EventDataList {
+  int64 Uuid = 1;
+  EventData Events = 2;
+}
+
+message EventData {
+  int32 EventType = 1;
+  repeated uint32 IntParams = 2;
+  repeated uint32 LongParams = 3;
+  repeated uint32 FloatParams = 4;
+  string StrParams = 5;
+}
+
+message BulletEvent {
+  int64 Uuid = 1;
+  int32 EnterStageId = 2;
+}
+
+message SkillEffect {
+  int64 Uuid = 1;
+  SyncDamageInfo Damages = 2;
+  int64 TotalDamage = 3;
+}
+
+message SyncDamageInfo {
+  int32 DamageSource = 1;
+  bool IsMiss = 2;
+  bool IsCrit = 3;
+  int32 Type = 4;
+  int32 TypeFlag = 5;
+  int64 Value = 6;
+  int64 ActualValue = 7;
+  int64 LuckyValue = 8;
+  int64 HpLessenValue = 9;
+  int64 ShieldLessenValue = 10;
+  int64 AttackerUuid = 11;
+  int32 OwnerId = 12;
+  int32 OwnerLevel = 13;
+  int32 OwnerStage = 14;
+  int32 HitEventId = 15;
+  bool IsNormal = 16;
+  bool IsDead = 17;
+  int32 Property = 18;
+  Vector3 DamagePos = 19;
+  ClientHitPartInfo PartInfos = 20;
+  int64 TopSummonerId = 21;
+  Vector2 DamageWeight = 22;
+  uint32 PassiveUuid = 23;
+  bool IsRainbow = 24;
+  int32 DamageMode = 25;
+}
+
+message Vector3 {
+  float X = 1;
+  float Y = 2;
+  float Z = 3;
+}
+
+message ClientHitPartInfo {
+  int32 PartId = 1;
+  Vector3 DamagePos = 2;
+  int64 DamageVal = 3;
+}
+
+message Vector2 {
+  float X = 1;
+  float Y = 2;
+}
+
+message SeqPassiveSkillInfo {
+  int64 ActorUuid = 1;
+  PassiveSkillInfo PassiveInfos = 2;
+}
+
+message PassiveSkillInfo {
+  int32 Uuid = 1;
+  int64 TargetUuid = 2;
+  int64 StageBeginTime = 3;
+  int64 BeginTime = 4;
+  int32 StagePlayNum = 5;
+  int32 SkillId = 6;
+  int32 SkillLevel = 7;
+  int32 SkillStage = 8;
+}
+
+message SeqPassiveSkillEndInfo {
+  int64 ActorUuid = 1;
+  repeated uint32 Uuids = 2;
+}
+
+message BuffInfoSync {
+  int64 Uuid = 1;
+  BuffInfo BuffInfos = 2;
+}
+
+message BuffInfo {
+  int32 BuffUuid = 1;
+  int32 BaseId = 2;
+  int32 Level = 3;
+  int64 HostUuid = 4;
+  int32 TableUuid = 5;
+  int64 CreateTime = 6;
+  int64 FireUuid = 7;
+  int32 Layer = 8;
+  int32 PartId = 9;
+  int32 Count = 10;
+  int32 Duration = 11;
+  FightSourceInfo FightSourceInfo = 12;
+  BuffEffectLogicInfo LogicEffect = 13;
+}
+
+message FightSourceInfo {
+  int32 FightSourceType = 1;
+  int32 SourceConfigId = 2;
+}
+
+message BuffEffectLogicInfo {
+  int32 EffectType = 1;
+  bytes RawData = 2;
+  bool IsLoop = 3;
+}
+
+message BuffEffectSync {
+  int64 Uuid = 1;
+  BuffEffect BuffEffects = 2;
+}
+
+message BuffEffect {
+  int32 Type = 1;
+  int32 BuffUuid = 2;
+  int64 HostUuid = 3;
+  int64 TriggerTime = 4;
+  BuffEffectLogicInfo LogicEffect = 5;
+}
+
+message FakeBulletInfo {
+  int32 Uuid = 1;
+  int32 BulletId = 2;
+  int64 TargetId = 3;
+  int32 PartId = 4;
+  Vector3 Offset = 5;
+  Vector3 Rotate = 6;
+  int32 SkinId = 7;
+}
+
+message MagneticRideQueueChangeInfo {
+  int64 QueueUuid = 1;
+  MagneticRidePassengerChangeInfo PassengerChangeInfo = 2;
+  MagneticRidePathPointChangeInfo PathPointChangeInfo = 3;
+  bool IsCircle = 4;
+  bool IsRemove = 5;
+  float PathLength = 6;
+}
+
+message MagneticRidePassengerChangeInfo {
+  PassengerChangeParam PassengerChangeList = 1;
+}
+
+message PassengerChangeParam {
+  bool IsAddPassenger = 1;
+  int64 AddOrRemoveUuid = 2;
+}
+
+message MagneticRidePathPointChangeInfo {
+  PathPointChangeParam PathPointChangeList = 1;
+}
+
+message PathPointChangeParam {
+  int32 Operation = 1;
+  Position AddPoint = 2;
+  int32 RemovePointCount = 3;
+}
+
+message Position {
+  float X = 1;
+  float Y = 2;
+  float Z = 3;
+  float Dir = 4;
+}
+
+message AoiSyncToMeDelta {
+  AoiSyncDelta BaseDelta = 1;
+  repeated uint32 SyncHateIds = 2;
+  SkillCD SyncSkillCDs = 3;
+  FightResCD FightResCDs = 4;
+  int64 Uuid = 5;
+}
+
+message SkillCD {
+  int32 SkillLevelId = 1;
+  int64 BeginTime = 2;
+  int32 Duration = 3;
+  int32 SkillCDType = 4;
+  int32 ValidCDTime = 5;
+}
+
+message FightResCD {
+  int32 ResId = 1;
+  int64 BeginTime = 2;
+  int32 Duration = 3;
+  int32 ValidCDTime = 4;
+}
+
+message SyncContainerData {
+  CharSerialize VData = 1;
+}
+
+message CharSerialize {
+  int64 CharId = 1;
+  CharBaseInfo CharBase = 2;
+  ProfessionList ProfessionList = 61;
+}
+
+message CharBaseInfo {
+  string Name = 5;
+}
+
+message ProfessionList {
+  int32 CurProfessionId = 1;
+}
+
+message SyncNearEntities {
+  Entity Appear = 1;
+}
+
+message Entity {
+  int64 Uuid = 1;
+  int32 EntType = 2;
+  AttrCollection Attrs = 3;
+}
+
+message SyncContainerDirtyData {
+  BufferStream VData = 1;
+}
+
+message BufferStream {
+  bytes Buffer = 1;
+}

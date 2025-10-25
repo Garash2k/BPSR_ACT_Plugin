@@ -1,0 +1,60 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using SharpPcap;
+using SharpPcap.LibPcap;
+
+namespace BPSR_ACT_Plugin.src
+{
+    internal static class SharpPcapHandler
+    {
+        private static LibPcapLiveDevice _device;
+
+        public static Action<string> OnLogStatus;
+
+        public static void StartListening()
+        {
+            foreach (var devices in LibPcapLiveDeviceList.Instance)
+            {
+                OnLogStatus($"Found device: {devices.Name} - {devices.Description}");
+
+                if (devices.Description.ToLower().Contains("miniport")) continue;
+                if (devices.Description.ToLower().Contains("loopback")) continue;
+                _device = devices;
+                break;
+            }
+
+            OnLogStatus($"Using device: {_device.Name} - {_device.Description}");
+
+            _device.Open();
+
+            // Forward device packet events to subscribers of this class event.
+            _device.OnPacketArrival += (sender, e) => OnPacketArrival?.Invoke(sender, e);
+
+            _device.StartCapture();
+        }
+
+        public static event PacketArrivalEventHandler OnPacketArrival;
+
+        public static void StopListening()
+        {
+            if (_device == null) return;
+
+            try
+            {
+                _device.StopCapture();
+                _device.Close();
+            }
+            catch (Exception)
+            {
+                // swallow or log as appropriate
+            }
+            finally
+            {
+                _device = null;
+            }
+        }
+    }
+}

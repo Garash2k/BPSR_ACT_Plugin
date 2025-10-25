@@ -1,0 +1,76 @@
+## Visual Studio / .NET - common ignores for .NET Framework 4.8 projects
+
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# VS workspace
+.vs/
+.vscode/
+
+# Build results
+[Bb]in/
+[Oo]bj/
+build/
+PublishProfiles/
+artifacts/
+TestResults/
+
+# NuGet
+packages/
+.nuget/
+*.nupkg
+project.lock.json
+project.fragment.lock.json
+
+# Publish / deployment
+publish/
+*.Publish.xml
+*.deploy.cmd
+
+# Debugging and profiling
+*.log
+*.vsix
+*.coverage
+*.coveragexml
+*.psess
+*.vsp
+*.pdb
+
+# Rider / IntelliJ
+.idea/
+*.sln.iml
+*.DotSettings.user
+_ReSharper*/
+*/_ReSharper.Caches/
+
+# Rider caches
+.idea/
+.idea_modules/
+
+# OS generated files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Temporary files
+*.tmp
+*.temp
+~$*
+*.bak
+
+# Test frameworks and results
+TestResults/
+nunit-*.xml
+coverage/
+
+# Package managers / tooling
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Native / third-party libs that might be copied to output (don't ignore source)
+# Keep outputs ignored via bin/obj instead of wildcard *.dll to avoid hiding checked-in libs.

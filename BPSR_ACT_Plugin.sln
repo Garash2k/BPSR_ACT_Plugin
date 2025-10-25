@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36603.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BPSR_ACT_Plugin", "BPSR_ACT_Plugin\BPSR_ACT_Plugin.csproj", "{94144818-577D-4C18-B2C9-ABFFDE4B93F2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BPSR_ProtocolBuffer", "BPSR_ProtocolBuffer\BPSR_ProtocolBuffer.csproj", "{19F7DB44-E9E5-0EF4-B678-08F7ADB41302}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{94144818-577D-4C18-B2C9-ABFFDE4B93F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94144818-577D-4C18-B2C9-ABFFDE4B93F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{94144818-577D-4C18-B2C9-ABFFDE4B93F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{94144818-577D-4C18-B2C9-ABFFDE4B93F2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{19F7DB44-E9E5-0EF4-B678-08F7ADB41302}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{19F7DB44-E9E5-0EF4-B678-08F7ADB41302}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{19F7DB44-E9E5-0EF4-B678-08F7ADB41302}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{19F7DB44-E9E5-0EF4-B678-08F7ADB41302}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {92279898-B428-47B5-B7EC-8AF873286F82}
+	EndGlobalSection
+EndGlobal
