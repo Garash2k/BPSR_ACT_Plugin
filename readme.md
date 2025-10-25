@@ -4,6 +4,14 @@ An ACT plugin for Blue Protocol: Star Resonance
 
 ![](https://files.catbox.moe/sx6atv.png)
 
+# Installation
+
+- Instal Npcap (https://nmap.org/npcap/) with "Install Npcap in WinPcap API-compatible Mode" checked.
+
+- Extract BPSR_ACT_Plugin.zip to a `%appdata%\Advanced Combat Tracker\Plugins\BPSR_ACT_Plugin` folder (aka `C:\Users\(USER)\AppData\Roaming\Advanced Combat Tracker\Plugins\BPSR_ACT_Plugin`)
+
+- Go to the Plugins tab in ACT, click "Browse" and select `BPSR_ACT_Plugin.dll`, then click Add/Enable Plugin.
+
 # Advanced Combat Tracker?! Really?! You psychopath, why?!
 
 Part stockholm syndrome. But also, if you dig into it, ACT is more than just a DPS meter. It has some pretty cool feature like death reports (how did I die?,) lookup damage by combatant (why did the add die to fast/not fast enough,) and individual hit information (that stack aoe did more damage that it was supposed to, who didn't get hit by it?)
