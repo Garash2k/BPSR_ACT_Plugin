@@ -28,7 +28,42 @@ jobs:
           }
 
       - name: Build (Release)
-        run: msbuild 'BPSR_ACT_Plugin\BPSR_ACT_Plugin.csproj' /p:Configuration=Release /m
+        shell: pwsh
+        run: |
+          # Try msbuild on PATH first (handy for local dev or custom runners)
+          if (Get-Command msbuild -ErrorAction SilentlyContinue) {
+            Write-Output "Using msbuild from PATH"
+            msbuild 'BPSR_ACT_Plugin\BPSR_ACT_Plugin.csproj' /p:Configuration=Release /m
+            exit $LASTEXITCODE
+          }
+
+          # Use vswhere to locate Visual Studio and MSBuild on the Windows runner
+          $vswhere = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
+          if (-not (Test-Path $vswhere)) {
+            Write-Error "vswhere not found at $vswhere"
+            exit 1
+          }
+
+          $installationPath = & $vswhere -latest -products * -requires Microsoft.Component.MSBuild -property installationPath
+          if (-not $installationPath) {
+            Write-Error "No Visual Studio installation with MSBuild found"
+            exit 1
+          }
+
+          # Prefer the Current MSBuild path, fall back to older layout if needed
+          $msbuildExe = Join-Path $installationPath 'MSBuild\Current\Bin\MSBuild.exe'
+          if (-not (Test-Path $msbuildExe)) {
+            $msbuildExe = Join-Path $installationPath 'MSBuild\15.0\Bin\MSBuild.exe'
+          }
+
+          if (-not (Test-Path $msbuildExe)) {
+            Write-Error "MSBuild.exe not found in Visual Studio installation: $installationPath"
+            exit 1
+          }
+
+          Write-Output "Using MSBuild at $msbuildExe"
+          & $msbuildExe 'BPSR_ACT_Plugin\BPSR_ACT_Plugin.csproj' /p:Configuration=Release /m
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
       - name: Package build output
         shell: pwsh
