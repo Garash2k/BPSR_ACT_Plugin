@@ -1,9 +1,12 @@
 name: Build and Create Release
 
+permissions:
+  contents: write
+
 on:
   push:
     tags:
-      - 'v*.*.*'    # trigger on semver-style tags like v1.2.3
+      - 'v*.*.*'
 
 jobs:
   build-and-release:
@@ -74,15 +77,12 @@ jobs:
           if (Test-Path $out) {
             $zip = "artifacts\BPSR_ACT_Plugin-$env:RELEASE_TAG.zip"
             Get-ChildItem -Path $out -Recurse | Compress-Archive -DestinationPath $zip -Force
-            Write-Output "Packaged $zip"
-          } else {
-            Write-Error "Build output folder not found: $out"
-            exit 1
-          }
+          } else { exit 1 }
 
       - name: Create GitHub Release and upload artifact
         uses: ncipollo/release-action@v1
         with:
           tag: ${{ env.RELEASE_TAG }}
           name: Release ${{ env.RELEASE_TAG }}
-          files: artifacts/*.zip
+          artifacts: artifacts/*.zip
+          token: ${{ secrets.GITHUB_TOKEN }}
