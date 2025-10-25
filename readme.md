@@ -4,7 +4,7 @@ An ACT plugin for Blue Protocol: Star Resonance
 
 https://files.catbox.moe/sx6atv.png
 
-v0.1.0
+v0.1.0 yeaaa
 
 # TODOs:
 
