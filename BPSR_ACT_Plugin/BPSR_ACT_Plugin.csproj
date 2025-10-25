@@ -11,6 +11,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <PackageReference Include="AdvancedCombatTracker" Version="3.8.2.285" />
 	  <PackageReference Include="SharpPcap" Version="6.3.1" />
 	  <PackageReference Include="ZstdSharp.Port" Version="0.8.6" />
 	</ItemGroup>
@@ -22,10 +23,6 @@
 	<ItemGroup>
 		<Reference Include="System.Web.Extensions" />
 		<Reference Include="System.Windows.Forms" />
-		<Reference Include="Advanced Combat Tracker">
-			<HintPath>C:\Program Files (x86)\Advanced Combat Tracker\Advanced Combat Tracker.exe</HintPath>
-			<Private>False</Private>
-		</Reference>
 	</ItemGroup>
 
 	<ItemGroup>
