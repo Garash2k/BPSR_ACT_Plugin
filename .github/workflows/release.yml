@@ -90,12 +90,9 @@ jobs:
       - name: Package build output
         shell: pwsh
         run: |
-          $out = 'BPSR_ACT_Plugin\bin\Release'
-          New-Item -ItemType Directory -Path artifacts -Force | Out-Null
-          if (Test-Path $out) {
-            $zip = "artifacts\BPSR_ACT_Plugin-$env:RELEASE_TAG.zip"
-            Get-ChildItem -Path $out -Recurse | Compress-Archive -DestinationPath $zip -Force
-          } else { exit 1 }
+          Push-Location 'BPSR_ACT_Plugin\bin\Release'
+          Compress-Archive -Path * -DestinationPath '../../artifacts/BPSR_ACT_Plugin-$env:RELEASE_TAG.zip' -Force
+          Pop-Location
 
       - name: Create GitHub Release and upload artifact
         uses: ncipollo/release-action@v1
