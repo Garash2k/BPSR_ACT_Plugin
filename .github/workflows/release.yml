@@ -23,10 +23,7 @@ jobs:
         run: |
           $paths = @(
             'BPSR_ACT_Plugin\bin',
-            'BPSR_ACT_Plugin\obj',
             'BPSR_ProtocolBuffer\bin',
-            'BPSR_ProtocolBuffer\obj',
-            'artifacts'
           )
           foreach ($p in $paths) {
             if (Test-Path $p) {
