@@ -91,7 +91,19 @@ jobs:
         shell: pwsh
         run: |
           Push-Location 'BPSR_ACT_Plugin\bin\Release'
-          Compress-Archive -Path * -DestinationPath '../../artifacts/BPSR_ACT_Plugin-$env:RELEASE_TAG.zip' -Force
+
+          # Ensure artifacts folder exists (two levels up from this location)
+          $artifactsPathInfo = Resolve-Path -Path '..\..\artifacts' -ErrorAction SilentlyContinue
+          if (-not $artifactsPathInfo) {
+            New-Item -ItemType Directory -Path '..\..\artifacts' | Out-Null
+            $artifactsPathInfo = Resolve-Path -Path '..\..\artifacts'
+          }
+
+          # Build a safe destination path (expands $env:RELEASE_TAG correctly)
+          $dest = Join-Path $artifactsPathInfo.Path ("BPSR_ACT_Plugin-$env:RELEASE_TAG.zip")
+
+          Compress-Archive -Path * -DestinationPath $dest -Force
+
           Pop-Location
 
       - name: Create GitHub Release and upload artifact
