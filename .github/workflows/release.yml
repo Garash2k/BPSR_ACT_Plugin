@@ -18,18 +18,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup NuGet client
-        uses: NuGet/setup-nuget@v1
-
-      - name: Restore NuGet packages
-        shell: pwsh
-        run: |
-          if (Test-Path 'BPSR_ACT_Plugin.sln') {
-            nuget restore 'BPSR_ACT_Plugin.sln'
-          } else {
-            nuget restore 'BPSR_ACT_Plugin\BPSR_ACT_Plugin.csproj'
-          }
-
       - name: Clean bin/obj before build
         shell: pwsh
         run: |
@@ -47,6 +35,18 @@ jobs:
             } else {
               Write-Output "Not found: $p"
             }
+          }
+
+      - name: Setup NuGet client
+        uses: NuGet/setup-nuget@v1
+
+      - name: Restore NuGet packages
+        shell: pwsh
+        run: |
+          if (Test-Path 'BPSR_ACT_Plugin.sln') {
+            nuget restore 'BPSR_ACT_Plugin.sln'
+          } else {
+            nuget restore 'BPSR_ACT_Plugin\BPSR_ACT_Plugin.csproj'
           }
 
       - name: Build (Release)
