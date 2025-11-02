@@ -30,6 +30,25 @@ jobs:
             nuget restore 'BPSR_ACT_Plugin\BPSR_ACT_Plugin.csproj'
           }
 
+      - name: Clean bin/obj before build
+        shell: pwsh
+        run: |
+          $paths = @(
+            'BPSR_ACT_Plugin\bin',
+            'BPSR_ACT_Plugin\obj',
+            'BPSR_ProtocolBuffer\bin',
+            'BPSR_ProtocolBuffer\obj',
+            'artifacts'
+          )
+          foreach ($p in $paths) {
+            if (Test-Path $p) {
+              Write-Output "Removing: $p"
+              Remove-Item $p -Recurse -Force -ErrorAction SilentlyContinue
+            } else {
+              Write-Output "Not found: $p"
+            }
+          }
+
       - name: Build (Release)
         shell: pwsh
         run: |
