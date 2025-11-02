@@ -6,12 +6,6 @@
     <OutputType>Library</OutputType>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Remove="BPSR_ProtocolBuffer.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Remove="BPSR_ProtocolBuffer.proto" />
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="Google.Protobuf" Version="3.21.9" />
   </ItemGroup>
 </Project>

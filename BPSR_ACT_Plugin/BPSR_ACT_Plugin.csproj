@@ -2,6 +2,9 @@
 
 	<PropertyGroup>
 		<TargetFramework>net48</TargetFramework>
+		<OutputPath>$(MSBuildProjectDirectory)\bin\$(Configuration)\BPSR_ACT_Plugin\</OutputPath>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
 	</PropertyGroup>
 
 	<ItemGroup>

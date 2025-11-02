@@ -71,8 +71,7 @@ jobs:
       - name: Package build output
         shell: pwsh
         run: |
-          $out = 'BPSR_ACT_Plugin\bin\Release\net48'
-          if (-not (Test-Path $out)) { $out = 'BPSR_ACT_Plugin\bin\Release' }
+          $out = 'BPSR_ACT_Plugin\bin\Release\BPSR_ACT_Plugin'
           New-Item -ItemType Directory -Path artifacts -Force | Out-Null
           if (Test-Path $out) {
             $zip = "artifacts\BPSR_ACT_Plugin-$env:RELEASE_TAG.zip"
