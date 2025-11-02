@@ -90,21 +90,11 @@ jobs:
       - name: Package build output
         shell: pwsh
         run: |
-          Push-Location 'BPSR_ACT_Plugin\bin\Release'
-
-          # Ensure artifacts folder exists (two levels up from this location)
-          $artifactsPathInfo = Resolve-Path -Path '..\..\artifacts' -ErrorAction SilentlyContinue
-          if (-not $artifactsPathInfo) {
-            New-Item -ItemType Directory -Path '..\..\artifacts' | Out-Null
-            $artifactsPathInfo = Resolve-Path -Path '..\..\artifacts'
-          }
-
-          # Build a safe destination path (expands $env:RELEASE_TAG correctly)
-          $dest = Join-Path $artifactsPathInfo.Path ("BPSR_ACT_Plugin-$env:RELEASE_TAG.zip")
-
-          Compress-Archive -Path * -DestinationPath $dest -Force
-
-          Pop-Location
+          $out = 'BPSR_ACT_Plugin\bin\Release\BPSR_ACT_Plugin'
+          if (Test-Path $out) {
+            $zip = "artifacts\BPSR_ACT_Plugin-$env:RELEASE_TAG.zip"
+            Compress-Archive $out -DestinationPath $zip -Force
+          } else { exit 1 }
 
       - name: Create GitHub Release and upload artifact
         uses: ncipollo/release-action@v1
