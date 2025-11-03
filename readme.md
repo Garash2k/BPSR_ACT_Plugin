@@ -18,14 +18,19 @@ Part stockholm syndrome. But also, if you dig into it, ACT is more than just a D
 
 # TODOs:
 
-## Req before being happy with personal use
-- Find a way to name encounters instead of them ending up as "Encounter" (because no allies?)
-- Make Death Reports work, for both players and monsters
-- remove weird character before others' names
-	- Make sure character names work on par with SRDC's
+## Priority
+- Update localization
+- Fix some healing skills showing up as damage
 - Show classes&specs in ACT
-- Understand why true isCrits don't show up as crits
+- Make sure character names work on par with SRDC's
+	- Change Unknown -> Unknown Player
+- Make Death Reports work, for both players and monsters
+
+## Req before being happy with personal use
 - Handle zones
+- Find a way to name encounters instead of them ending up as "Encounter" (because no allies?)
+- remove weird character before others' names
+- Understand why true isCrits don't show up as crits
 - Fix logs element emojis
 
 ## Req before ideally pubbing on github
