@@ -24,6 +24,7 @@ jobs:
           $paths = @(
             'BPSR_ACT_Plugin\bin',
             'BPSR_ProtocolBuffer\bin'
+            'artifacts'
           )
           foreach ($p in $paths) {
             if (Test-Path $p) {
@@ -84,11 +85,15 @@ jobs:
           & $msbuildExe 'BPSR_ACT_Plugin\BPSR_ACT_Plugin.csproj' /p:Configuration=Release /m
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v4
-        with:
-            name: BPSR_ACT_Plugin.zip
-            path: BPSR_ACT_Plugin/bin/Release/BPSR_ACT_Plugin/
+      - name: Package build output
+        shell: pwsh
+        run: |
+          $out = 'BPSR_ACT_Plugin\bin\Release\BPSR_ACT_Plugin'
+          New-Item -ItemType Directory -Path artifacts -Force | Out-Null
+          if (Test-Path $out) {
+            $zip = "artifacts\BPSR_ACT_Plugin-$env:RELEASE_TAG.zip"
+            Compress-Archive $out -DestinationPath $zip -Force
+          } else { exit 1 }
 
       - name: Create GitHub Release and upload artifact
         uses: ncipollo/release-action@v1
