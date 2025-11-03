@@ -254,6 +254,12 @@ namespace BPSR_ACT_Plugin.src
                 try { luckyValue = dmg.LuckyValue; } catch { }
                 try { hpLessenValue = dmg.HpLessenValue; } catch { }
 
+                long damage = 0;
+                if (value > 0)
+                    damage = value;
+                else if (luckyValue > 0)
+                    damage = luckyValue;
+
                 int typeFlag = 0;
                 try { typeFlag = dmg.TypeFlag; } catch { }
                 bool isDead = false;
@@ -284,9 +290,9 @@ namespace BPSR_ACT_Plugin.src
                 int swingType = isHeal ? ACTLogHelper.HealingSwingType : (int)SwingTypeEnum.NonMelee;
 
                 //TODO: Understand why true isCrits don't show up as crits
-                OnLogMasterSwing?.Invoke(new MasterSwing(swingType, isCrit, string.Join(",", extras), value, DateTime.Now, 0, UILabelHelper.GetSkillName(skillId), srcStr, UILabelHelper.GetElementName(dmg.Property), tgtStr));
+                OnLogMasterSwing?.Invoke(new MasterSwing(swingType, isCrit, string.Join(",", extras), damage, DateTime.Now, 0, UILabelHelper.GetSkillName(skillId), srcStr, UILabelHelper.GetElementName(dmg.Property), tgtStr));
 
-                var log = $"[{actionType}] DS:{damageSource} {srcStr} {tgtStr} ID:{skillId} VAL:{value} HPLSN:{hpLessenValue} EXT:{string.Join("|", extras)}";
+                var log = $"[{actionType}] DS:{damageSource} {srcStr} {tgtStr} ID:{skillId} VAL:{damage} HPLSN:{hpLessenValue} EXT:{string.Join("|", extras)}";
                 OnLogStatus?.Invoke(log);
 
             }
