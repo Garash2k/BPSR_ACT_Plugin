@@ -19,7 +19,6 @@ Part stockholm syndrome. But also, if you dig into it, ACT is more than just a D
 # TODOs:
 
 ## Priority
-- Update localization
 - Fix some healing skills showing up as damage
 - Show classes&specs in ACT
 - Make sure character names work on par with SRDC's
@@ -55,6 +54,7 @@ Part stockholm syndrome. But also, if you dig into it, ACT is more than just a D
 # Shoutouts
 - [AdvancedCombatTracker](https://advancedcombattracker.com/) by EQAditu - (duh)
 - [Star Resonance Damage Counter](https://github.com/dmlgzs/StarResonanceDamageCounter) by Dimole - I had zero network packet capture experience before starting this, most of the networking & packet handling code is ported from that project.
+- [Blue Protocol Data Analysis](https://github.com/Zaarrg/BlueProtocolStarResonanceDataAnalysis) by Zaarrg's for some translation data
 - Used Nuget libraries
 	- [SharpPcap](https://www.nuget.org/packages/SharpPcap) by Tamir Gal, Chris Morgan and others
 	- [ZstdSharp.Port](https://www.nuget.org/packages/ZstdSharp.Port) by Oleg Stepanischev
