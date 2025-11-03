@@ -87,7 +87,7 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-            name: BPSR_ACT_Plugin-$env:RELEASE_TAG.zip
+            name: BPSR_ACT_Plugin.zip
             path: BPSR_ACT_Plugin/bin/Release/BPSR_ACT_Plugin/
 
       - name: Create GitHub Release and upload artifact
