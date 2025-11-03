@@ -84,14 +84,11 @@ jobs:
           & $msbuildExe 'BPSR_ACT_Plugin\BPSR_ACT_Plugin.csproj' /p:Configuration=Release /m
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
-      - name: Package build output
-        shell: pwsh
-        run: |
-          $out = 'BPSR_ACT_Plugin\bin\Release\BPSR_ACT_Plugin'
-          if (Test-Path $out) {
-            $zip = "artifacts\BPSR_ACT_Plugin-$env:RELEASE_TAG.zip"
-            Compress-Archive $out -DestinationPath $zip -Force
-          } else { exit 1 }
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+            name: BPSR_ACT_Plugin-$env:RELEASE_TAG.zip
+            path: BPSR_ACT_Plugin/bin/Release/BPSR_ACT_Plugin/
 
       - name: Create GitHub Release and upload artifact
         uses: ncipollo/release-action@v1
