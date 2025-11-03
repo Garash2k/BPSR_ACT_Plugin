@@ -19,10 +19,8 @@ Part stockholm syndrome. But also, if you dig into it, ACT is more than just a D
 # TODOs:
 
 ## Priority
-- Fix some healing skills showing up as damage
 - Show classes&specs in ACT
 - Make sure character names work on par with SRDC's
-	- Change Unknown -> Unknown Player
 - Make Death Reports work, for both players and monsters
 
 ## Req before being happy with personal use
