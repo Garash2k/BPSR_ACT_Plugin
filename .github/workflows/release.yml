@@ -89,7 +89,7 @@ jobs:
         run: |
           $out = 'BPSR_ACT_Plugin\bin\Release\BPSR_ACT_Plugin'
           if (Test-Path $out) {
-            $zip = "..\artifacts\BPSR_ACT_Plugin-$env:RELEASE_TAG.zip"
+            $zip = "artifacts\BPSR_ACT_Plugin-$env:RELEASE_TAG.zip"
             Compress-Archive $out -DestinationPath $zip -Force
           } else { exit 1 }
 
