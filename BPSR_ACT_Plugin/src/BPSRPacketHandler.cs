@@ -234,7 +234,7 @@ namespace BPSR_ACT_Plugin.src
         }
 
         // Helper to determine whether UUID corresponds to player or monster (matches JS checks)
-        private static bool IsUuidPlayer(ulong uuid) => (uuid & 0xffffUL) == 640UL;
+        public static bool IsUuidPlayer(ulong uuid) => (uuid & 0xffffUL) == 640UL;
         private static bool IsUuidMonster(ulong uuid) => (uuid & 0xffffUL) == 64UL;
 
         // Processes a single SyncDamageInfo
@@ -278,13 +278,13 @@ namespace BPSR_ACT_Plugin.src
                 var attacker = dmg.TopSummonerId != 0 ? dmg.TopSummonerId : dmg.AttackerUuid;
 
                 // Compose a human readable log similar to JS
-                string srcStr = UILabelHelper.GetAssociation(attacker >> 16);
-                string tgtStr = UILabelHelper.GetAssociation((long)targetUid);
+                string srcStr = UILabelHelper.GetAssociation(uuid: attacker);
+                string tgtStr = UILabelHelper.GetAssociation(uid: (long)targetUid, isTargetPlayer);
 
-                SwingTypeEnum swingType = isHeal ? SwingTypeEnum.Healing : SwingTypeEnum.NonMelee;
+                int swingType = isHeal ? ACTLogHelper.HealingSwingType : (int)SwingTypeEnum.NonMelee;
 
                 //TODO: Understand why true isCrits don't show up as crits
-                OnLogMasterSwing?.Invoke(new MasterSwing((int)swingType, isCrit, string.Join(",", extras), value, DateTime.Now, 0, UILabelHelper.GetSkillName(skillId), srcStr, UILabelHelper.GetElementName(dmg.Property), tgtStr));
+                OnLogMasterSwing?.Invoke(new MasterSwing(swingType, isCrit, string.Join(",", extras), value, DateTime.Now, 0, UILabelHelper.GetSkillName(skillId), srcStr, UILabelHelper.GetElementName(dmg.Property), tgtStr));
 
                 var log = $"[{actionType}] DS:{damageSource} {srcStr} {tgtStr} ID:{skillId} VAL:{value} HPLSN:{hpLessenValue} EXT:{string.Join("|", extras)}";
                 OnLogStatus?.Invoke(log);

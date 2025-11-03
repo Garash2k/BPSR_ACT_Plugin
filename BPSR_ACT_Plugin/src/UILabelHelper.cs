@@ -187,13 +187,18 @@ namespace BPSR_ACT_Plugin.src
             }
         }
 
-        public static string GetAssociation(long id)
+        public static string GetAssociation(long uuid)
         {
-            if (_ID_Name_Association.TryGetValue(id, out var name))
+            return GetAssociation(uuid >> 16, BPSRPacketHandler.IsUuidPlayer((ulong)uuid));
+        }
+
+        public static string GetAssociation(long uid, bool isPlayer)
+        {
+            if (_ID_Name_Association.TryGetValue(uid, out var name))
             {
                 return name;
             }
-            return $"Unknown ({id})";
+            return $"Unknown {(isPlayer ? "Player" : "Monster")} ({uid})";
         }
     }
 }

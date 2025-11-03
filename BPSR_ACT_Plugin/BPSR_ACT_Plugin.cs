@@ -31,6 +31,7 @@ namespace BPSR_ACT_Plugin
             SharpPcapHandler.OnPacketArrival += PacketCaptureHelper.Device_OnPacketArrival;
             PacketCaptureHelper.OnPayloadReady += BPSRPacketHandler.OnPayloadReady;
             BPSRPacketHandler.OnLogMasterSwing += ACTLogHelper.LogMasterSwing;
+
             SharpPcapHandler.StartListening();
 
             pluginStatusLabel.Text = "BPSR_ACT_Plugin initialized.";

@@ -10,6 +10,23 @@ namespace BPSR_ACT_Plugin.src
 {
     internal static class ACTLogHelper
     {
+        private static int? _healingSwingType;
+        /// <summary>
+        /// Normaly it'd simply be (int)SwingTypeEnum.Healing, but FFXIV_ACT_Plugin breaks ACT's default mappings.
+        /// This checks the current mappings to find the correct SwingType for healing.
+        /// </summary>
+        public static int HealingSwingType
+        {
+            get
+            {
+                if (!_healingSwingType.HasValue)
+                {
+                    _healingSwingType = CombatantData.SwingTypeToDamageTypeDataLinksOutgoing.First(s => s.Value.Contains(CombatantData.DamageTypeDataOutgoingHealing)).Key;
+                }
+                return _healingSwingType.Value;
+            }
+        }
+
         public static void LogMasterSwing(MasterSwing masterSwing)
         {
             if (ActGlobals.oFormActMain.SetEncounter(DateTime.Now, masterSwing.Attacker, masterSwing.Victim))
