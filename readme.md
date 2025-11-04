@@ -24,7 +24,6 @@ Part stockholm syndrome. But also, if you dig into it, ACT is more than just a D
 ## Req before being happy with personal use
 - Handle zones
 - Find a way to name encounters instead of them ending up as "Encounter" (because no allies?)
-- remove weird character before others' names
 - Understand why true isCrits don't show up as crits
 - Fix logs element emojis
 
@@ -44,9 +43,9 @@ Part stockholm syndrome. But also, if you dig into it, ACT is more than just a D
 
 ## Bonus
 - i18n?
+- Improve translation for monster names and skill names
 - Make a user parameter for device selection
-- proper translation for monster names and skill names
-- Show classes&specs in ACT
+- Show classes&specs in ACT (Turns out the Job column isn't vanilla, it gets added by FFXIV_ACT_Plugin)
 
 # Shoutouts
 - [AdvancedCombatTracker](https://advancedcombattracker.com/) by EQAditu - (duh)

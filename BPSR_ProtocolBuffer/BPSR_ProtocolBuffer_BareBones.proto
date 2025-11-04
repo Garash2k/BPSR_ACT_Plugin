@@ -13,36 +13,23 @@ enum EDamageType {
 }
 
 message SyncNearDeltaInfo {
-  AoiSyncDelta DeltaInfos = 1;
+  repeated AoiSyncDelta DeltaInfos = 1;
 }
 
 message SyncToMeDeltaInfo {
   AoiSyncToMeDelta DeltaInfo = 1;
 }
 
-message ActorBodyPartInfo {
-  int32 PartId = 1;
-  uint64 Hp = 2;
-  uint64 MaxHp = 3;
-  int32 State = 4;
-  int32 FleshyId = 5;
-}
-
-message ActorBodyPartInfos {
-  int64 Uuid = 1;
-  ActorBodyPartInfo Infos = 2;
-}
-
 message AoiSyncDelta {
   int64 Uuid = 1;
   AttrCollection Attrs = 2;
-  TempAttrCollection TempAttrs = 3;
-  EventDataList EventDataList = 4;
-  BulletEvent BulletEvent = 5;
-  ActorBodyPartInfos BodyPartInfos = 6;
+  // TempAttrCollection TempAttrs = 3;
+  // EventDataList EventDataList = 4;
+  // BulletEvent BulletEvent = 5;
+  // ActorBodyPartInfos BodyPartInfos = 6;
   SkillEffect SkillEffects = 7;
-  SeqPassiveSkillInfo PassiveSkillInfos = 8;
-  SeqPassiveSkillEndInfo PassiveSkillEndInfos = 9;
+  // SeqPassiveSkillInfo PassiveSkillInfos = 8;
+  // SeqPassiveSkillEndInfo PassiveSkillEndInfos = 9;
   // Considered unnecessary
   // BuffInfoSync BuffInfos = 10;
   // BuffEffectSync BuffEffect = 11;
@@ -52,7 +39,7 @@ message AoiSyncDelta {
 
 message AttrCollection {
   int64 Uuid = 1;
-  Attr Attrs = 2;
+  repeated Attr Attrs = 2;
   MapAttr MapAttrs = 3;
 }
 
@@ -73,36 +60,9 @@ message MapAttrValue {
   bytes Value = 3;
 }
 
-message TempAttrCollection {
-  TempAttr Attrs = 1;
-}
-
-message TempAttr {
-  int32 Id = 1;
-  int32 Value = 2;
-}
-
-message EventDataList {
-  int64 Uuid = 1;
-  EventData Events = 2;
-}
-
-message EventData {
-  int32 EventType = 1;
-  repeated uint32 IntParams = 2;
-  repeated uint32 LongParams = 3;
-  repeated uint32 FloatParams = 4;
-  string StrParams = 5;
-}
-
-message BulletEvent {
-  int64 Uuid = 1;
-  int32 EnterStageId = 2;
-}
-
 message SkillEffect {
   int64 Uuid = 1;
-  SyncDamageInfo Damages = 2;
+  repeated SyncDamageInfo Damages = 2;
   int64 TotalDamage = 3;
 }
 
@@ -149,27 +109,6 @@ message ClientHitPartInfo {
 message Vector2 {
   float X = 1;
   float Y = 2;
-}
-
-message SeqPassiveSkillInfo {
-  int64 ActorUuid = 1;
-  PassiveSkillInfo PassiveInfos = 2;
-}
-
-message PassiveSkillInfo {
-  int32 Uuid = 1;
-  int64 TargetUuid = 2;
-  int64 StageBeginTime = 3;
-  int64 BeginTime = 4;
-  int32 StagePlayNum = 5;
-  int32 SkillId = 6;
-  int32 SkillLevel = 7;
-  int32 SkillStage = 8;
-}
-
-message SeqPassiveSkillEndInfo {
-  int64 ActorUuid = 1;
-  repeated uint32 Uuids = 2;
 }
 
 message BuffInfoSync {

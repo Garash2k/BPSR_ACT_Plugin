@@ -59,7 +59,11 @@ namespace BPSR_ACT_Plugin.src
                 switch ((AttrType)attr.Id)
                 {
                     case AttrType.AttrName:
-                        string name = attr.RawData?.ToStringUtf8();
+                        string name = attr.RawData?.ToStringUtf8()
+                            ?.Replace("\u0004", "")
+                            ?.Replace("\u0006", "")
+                            ?.Replace("\t", "")
+                            ?.Replace("\n", "");
                         if (!string.IsNullOrEmpty(name))
                             UILabelHelper.AddAssociation(id, name);
                         break;
