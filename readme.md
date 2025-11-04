@@ -7,7 +7,7 @@ An ACT plugin for Blue Protocol: Star Resonance
 # Installation
 
 - Instal **Npcap**: https://nmap.org/npcap/
-	- Keep this option checked: *"Install Npcap in WinPcap API-compatible Mode"*
+	- While installing, keep this option checked: *"Install Npcap in WinPcap API-compatible Mode"*
 
 - Extract **BPSR_ACT_Plugin-vX.X.X.zip** to this folder `%appdata%\Advanced Combat Tracker\Plugins`
 	- You should end up with something like `C:\Users\(USER)\AppData\Roaming\Advanced Combat Tracker\Plugins\BPSR_ACT_Plugin\BPSR_ACT_Plugin.dll`
