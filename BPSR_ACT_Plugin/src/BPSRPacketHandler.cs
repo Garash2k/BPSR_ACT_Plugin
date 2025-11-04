@@ -76,14 +76,9 @@ namespace BPSR_ACT_Plugin.src
                         var data = attr.RawData?.ToByteArray();
                         if (data != null && data.Length > 0)
                         {
-                            // Interpret 1..4 bytes as little-endian integer
-                            int len = Math.Min(4, data.Length);
-                            for (int i = 0; i < len; i++)
-                            {
-                                monsterID |= (data[i] & 0xFF) << (8 * i);
-                            }
+                            monsterID = new CodedInputStream(data).ReadInt32();
+                            UILabelHelper.AddAssociation(id, UILabelHelper.GetMonsterName(monsterID));
                         }
-                        UILabelHelper.AddAssociation(id, UILabelHelper.GetMonsterName(monsterID));
                         break;
                     case AttrType.AttrProfessionId:
                         break;

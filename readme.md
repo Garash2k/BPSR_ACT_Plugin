@@ -18,9 +18,6 @@ Part stockholm syndrome. But also, if you dig into it, ACT is more than just a D
 
 # TODOs:
 
-## Priority
-- Make monster names work better
-
 ## Req before being happy with personal use
 - Handle zones
 - Find a way to name encounters instead of them ending up as "Encounter" (because no allies?)
