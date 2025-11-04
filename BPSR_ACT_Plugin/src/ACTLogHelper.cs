@@ -27,11 +27,27 @@ namespace BPSR_ACT_Plugin.src
             }
         }
 
-        public static void LogMasterSwing(MasterSwing masterSwing)
+        public static void LogMasterSwing(MasterSwing masterSwing, bool isDead)
         {
             if (ActGlobals.oFormActMain.SetEncounter(DateTime.Now, masterSwing.Attacker, masterSwing.Victim))
             {
                 ActGlobals.oFormActMain.AddCombatAction(masterSwing);
+                if (isDead)
+                {
+                    MasterSwing deathSwing = new MasterSwing(
+                        masterSwing.SwingType,
+                        masterSwing.Critical,
+                        "Death",
+                        Dnum.Death,
+                        masterSwing.Time,
+                        masterSwing.TimeSorter,
+                        masterSwing.AttackType,
+                        masterSwing.Attacker,
+                        masterSwing.DamageType,
+                        masterSwing.Victim
+                    );
+                    ActGlobals.oFormActMain.AddCombatAction(deathSwing);
+                }
             }
         }
     }

@@ -13,7 +13,7 @@ namespace BPSR_ACT_Plugin.src
     internal static class BPSRPacketHandler
     {
         public static Action<string> OnLogStatus;
-        public static Action<MasterSwing> OnLogMasterSwing;
+        public static Action<MasterSwing, bool> OnLogMasterSwing;
 
         public static long _currentUserUuid = 0;
 
@@ -290,7 +290,7 @@ namespace BPSR_ACT_Plugin.src
                 int swingType = isHeal ? ACTLogHelper.HealingSwingType : (int)SwingTypeEnum.NonMelee;
 
                 //TODO: Understand why true isCrits don't show up as crits
-                OnLogMasterSwing?.Invoke(new MasterSwing(swingType, isCrit, string.Join(",", extras), damage, DateTime.Now, 0, UILabelHelper.GetSkillName(skillId), srcStr, UILabelHelper.GetElementName(dmg.Property), tgtStr));
+                OnLogMasterSwing?.Invoke(new MasterSwing(swingType, isCrit, string.Join(",", extras), damage, DateTime.Now, 0, UILabelHelper.GetSkillName(skillId), srcStr, UILabelHelper.GetElementName(dmg.Property), tgtStr), isDead);
 
                 var log = $"[{actionType}] DS:{damageSource} {srcStr} {tgtStr} ID:{skillId} VAL:{damage} HPLSN:{hpLessenValue} EXT:{string.Join("|", extras)}";
                 OnLogStatus?.Invoke(log);

@@ -19,9 +19,7 @@ Part stockholm syndrome. But also, if you dig into it, ACT is more than just a D
 # TODOs:
 
 ## Priority
-- Show classes&specs in ACT
 - Make sure character names work on par with SRDC's
-- Make Death Reports work, for both players and monsters
 
 ## Req before being happy with personal use
 - Handle zones
@@ -48,6 +46,7 @@ Part stockholm syndrome. But also, if you dig into it, ACT is more than just a D
 - i18n?
 - Make a user parameter for device selection
 - proper translation for monster names and skill names
+- Show classes&specs in ACT
 
 # Shoutouts
 - [AdvancedCombatTracker](https://advancedcombattracker.com/) by EQAditu - (duh)
