@@ -243,7 +243,7 @@ message ProfessionList {
 }
 
 message SyncNearEntities {
-  Entity Appear = 1;
+  repeated Entity Appear = 1;
 }
 
 message Entity {

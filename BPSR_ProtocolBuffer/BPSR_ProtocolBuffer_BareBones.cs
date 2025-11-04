@@ -100,7 +100,7 @@ public static partial class BPSRProtocolBufferBareBonesReflection
               "JwoOUHJvZmVzc2lvbkxpc3QYPSABKAsyDy5Qcm9mZXNzaW9uTGlzdCIcCgxD",
               "aGFyQmFzZUluZm8SDAoETmFtZRgFIAEoCSIpCg5Qcm9mZXNzaW9uTGlzdBIX",
               "Cg9DdXJQcm9mZXNzaW9uSWQYASABKAUiKwoQU3luY05lYXJFbnRpdGllcxIX",
-              "CgZBcHBlYXIYASABKAsyBy5FbnRpdHkiRwoGRW50aXR5EgwKBFV1aWQYASAB",
+              "CgZBcHBlYXIYASADKAsyBy5FbnRpdHkiRwoGRW50aXR5EgwKBFV1aWQYASAB",
               "KAMSDwoHRW50VHlwZRgCIAEoBRIeCgVBdHRycxgDIAEoCzIPLkF0dHJDb2xs",
               "ZWN0aW9uIjYKFlN5bmNDb250YWluZXJEaXJ0eURhdGESHAoFVkRhdGEYASAB",
               "KAsyDS5CdWZmZXJTdHJlYW0iHgoMQnVmZmVyU3RyZWFtEg4KBkJ1ZmZlchgB",
@@ -11658,7 +11658,7 @@ public sealed partial class SyncNearEntities : pb::IMessage<SyncNearEntities>
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public SyncNearEntities(SyncNearEntities other) : this()
     {
-        appear_ = other.appear_ != null ? other.appear_.Clone() : null;
+        appear_ = other.appear_.Clone();
         _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -11671,16 +11671,14 @@ public sealed partial class SyncNearEntities : pb::IMessage<SyncNearEntities>
 
     /// <summary>Field number for the "Appear" field.</summary>
     public const int AppearFieldNumber = 1;
-    private global::Entity appear_;
+    private static readonly pb::FieldCodec<global::Entity> _repeated_appear_codec
+        = pb::FieldCodec.ForMessage(10, global::Entity.Parser);
+    private readonly pbc::RepeatedField<global::Entity> appear_ = new pbc::RepeatedField<global::Entity>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::Entity Appear
+    public pbc::RepeatedField<global::Entity> Appear
     {
         get { return appear_; }
-        set
-        {
-            appear_ = value;
-        }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -11702,7 +11700,7 @@ public sealed partial class SyncNearEntities : pb::IMessage<SyncNearEntities>
         {
             return true;
         }
-        if (!object.Equals(Appear, other.Appear)) return false;
+        if (!appear_.Equals(other.appear_)) return false;
         return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -11711,7 +11709,7 @@ public sealed partial class SyncNearEntities : pb::IMessage<SyncNearEntities>
     public override int GetHashCode()
     {
         int hash = 1;
-        if (appear_ != null) hash ^= Appear.GetHashCode();
+        hash ^= appear_.GetHashCode();
         if (_unknownFields != null)
         {
             hash ^= _unknownFields.GetHashCode();
@@ -11733,10 +11731,7 @@ public sealed partial class SyncNearEntities : pb::IMessage<SyncNearEntities>
 #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
         output.WriteRawMessage(this);
 #else
-    if (appear_ != null) {
-      output.WriteRawTag(10);
-      output.WriteMessage(Appear);
-    }
+    appear_.WriteTo(output, _repeated_appear_codec);
     if (_unknownFields != null) {
       _unknownFields.WriteTo(output);
     }
@@ -11748,11 +11743,7 @@ public sealed partial class SyncNearEntities : pb::IMessage<SyncNearEntities>
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output)
     {
-        if (appear_ != null)
-        {
-            output.WriteRawTag(10);
-            output.WriteMessage(Appear);
-        }
+        appear_.WriteTo(ref output, _repeated_appear_codec);
         if (_unknownFields != null)
         {
             _unknownFields.WriteTo(ref output);
@@ -11765,10 +11756,7 @@ public sealed partial class SyncNearEntities : pb::IMessage<SyncNearEntities>
     public int CalculateSize()
     {
         int size = 0;
-        if (appear_ != null)
-        {
-            size += 1 + pb::CodedOutputStream.ComputeMessageSize(Appear);
-        }
+        size += appear_.CalculateSize(_repeated_appear_codec);
         if (_unknownFields != null)
         {
             size += _unknownFields.CalculateSize();
@@ -11784,14 +11772,7 @@ public sealed partial class SyncNearEntities : pb::IMessage<SyncNearEntities>
         {
             return;
         }
-        if (other.appear_ != null)
-        {
-            if (appear_ == null)
-            {
-                Appear = new global::Entity();
-            }
-            Appear.MergeFrom(other.Appear);
-        }
+        appear_.Add(other.appear_);
         _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -11813,10 +11794,7 @@ public sealed partial class SyncNearEntities : pb::IMessage<SyncNearEntities>
           _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
           break;
         case 10: {
-          if (appear_ == null) {
-            Appear = new global::Entity();
-          }
-          input.ReadMessage(Appear);
+          appear_.AddEntriesFrom(input, _repeated_appear_codec);
           break;
         }
       }
@@ -11844,11 +11822,7 @@ public sealed partial class SyncNearEntities : pb::IMessage<SyncNearEntities>
                     break;
                 case 10:
                     {
-                        if (appear_ == null)
-                        {
-                            Appear = new global::Entity();
-                        }
-                        input.ReadMessage(Appear);
+                        appear_.AddEntriesFrom(ref input, _repeated_appear_codec);
                         break;
                     }
             }

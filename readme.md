@@ -19,7 +19,7 @@ Part stockholm syndrome. But also, if you dig into it, ACT is more than just a D
 # TODOs:
 
 ## Priority
-- Make sure character names work on par with SRDC's
+- Make monster names work better
 
 ## Req before being happy with personal use
 - Handle zones

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows.Forms.VisualStyles;
 using Advanced_Combat_Tracker;
 using Google.Protobuf;
@@ -49,7 +50,10 @@ namespace BPSR_ACT_Plugin.src
             if (syncNearEntities?.Appear == null)
                 return;
 
-            AddNameFromAttr(syncNearEntities.Appear.Uuid >> 16, syncNearEntities?.Appear?.Attrs.Attrs);
+            foreach (var entity in syncNearEntities?.Appear)
+            {
+                AddNameFromAttr(entity.Uuid >> 16, entity.Attrs.Attrs);
+            }
         }
 
         private static void AddNameFromAttr(long id, RepeatedField<Attr> attrs)
@@ -59,15 +63,15 @@ namespace BPSR_ACT_Plugin.src
                 switch ((AttrType)attr.Id)
                 {
                     case AttrType.AttrName:
-                        string name = attr.RawData?.ToStringUtf8()
-                            ?.Replace("\u0004", "")
-                            ?.Replace("\u0006", "")
-                            ?.Replace("\t", "")
-                            ?.Replace("\n", "");
+                        string name = attr.RawData?.ToStringUtf8();
                         if (!string.IsNullOrEmpty(name))
+                        {
+                            name = Regex.Replace(name, @"\p{Cc}+", string.Empty);
+                            name = Regex.Replace(name, @"\s+", " ").Trim();
                             UILabelHelper.AddAssociation(id, name);
+                        }
                         break;
-                    case AttrType.AttrId:
+                    case AttrType.AttrId:   
                         int monsterID = 0;
                         var data = attr.RawData?.ToByteArray();
                         if (data != null && data.Length > 0)
