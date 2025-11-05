@@ -39,12 +39,12 @@ Part stockholm syndrome. But also, if you dig into it, ACT is more than just a D
 - contact ACT devs for ACT pub
 
 ## Bonus / Continuous
-- Actually handle zones and not have it just be Blue Protocol: Star Resonnance
+- Better autodetection + make a user parameter for device selection
 - Show classes&specs in ACT (Turns out the Job column isn't vanilla, it gets added by FFXIV_ACT_Plugin)
+- Actually handle zones and not have it just be Blue Protocol: Star Resonnance
 - Treat lucky procs the same way FFXIV_ACT_Plugin treats Direct Hits
 - Improve translation for monster names and skill names
 - i18n?
-- Make a user parameter for device selection
 
 # Shoutouts
 - [AdvancedCombatTracker](https://advancedcombattracker.com/) by EQAditu - (duh)
