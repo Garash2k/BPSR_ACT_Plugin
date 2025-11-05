@@ -25,7 +25,6 @@ Part stockholm syndrome. But also, if you dig into it, ACT is more than just a D
 ## Req before being happy with personal use
 - Handle zones
 - Understand why true isCrits don't show up as crits
-- Fix logs element emojis
 
 ## Req before ideally pubbing on github
 - Code quality: PacketCaptureHandler

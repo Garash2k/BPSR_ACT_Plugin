@@ -139,27 +139,27 @@ namespace BPSR_ACT_Plugin.src
             switch ((EDamageProperty)property)
             {
                 case EDamageProperty.General:
-                    return "⚔️General";
+                    return "General";
                 case EDamageProperty.Fire:
-                    return "🔥Fire";
+                    return "Fire";
                 case EDamageProperty.Water:
-                    return "❄️Water";
+                    return "Water";
                 case EDamageProperty.Electricity:
-                    return "⚡Electricity";
+                    return "Electricity";
                 case EDamageProperty.Wood:
-                    return "🍀Wood";
+                    return "Wood";
                 case EDamageProperty.Wind:
-                    return "💨Wind";
+                    return "Wind";
                 case EDamageProperty.Rock:
-                    return "⛰️Rock";
+                    return "Rock";
                 case EDamageProperty.Light:
-                    return "🌟Light";
+                    return "Light";
                 case EDamageProperty.Dark:
-                    return "🌑Dark";
+                    return "Dark";
                 case EDamageProperty.Count:
-                    return "❓Count";
+                    return "Count";
                 default:
-                    return "⚔️General";
+                    return "General";
             }
         }
 
