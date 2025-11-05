@@ -34,6 +34,9 @@ namespace BPSR_ACT_Plugin.src
         {
             if (ActGlobals.oFormActMain.SetEncounter(DateTime.Now, masterSwing.Attacker, masterSwing.Victim))
             {
+                if (!string.IsNullOrEmpty(ActGlobals.oFormActMain.ActiveZone.ActiveEncounter.Title))
+                    ActGlobals.oFormActMain.ActiveZone.ActiveEncounter.Title = masterSwing.Victim;
+
                 ActGlobals.oFormActMain.AddCombatAction(masterSwing);
                 if (isDead)
                 {
