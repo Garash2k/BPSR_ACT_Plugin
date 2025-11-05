@@ -29,13 +29,12 @@ Part stockholm syndrome. But also, if you dig into it, ACT is more than just a D
 - Fix logs element emojis
 
 ## Req before ideally pubbing on github
-- Review AssemblyHelper
-- Review all of the vibe code, esp. packet nerdery
-- Give PacketCaptureHelper it's offline timer back
+- Code quality: PacketCaptureHandler
+	- Consider giving it it's offline timer back
+- Code quality: BPSRPacketHandler
+- Code quality: ACTLogHandler / UILabelHelper
 - Double checks longs vs ulongs
-- Wtf is FindEnumerableOfType
-- Wtf is PacketBinaryReader
-- Make sure unexpected catches are logged
+- Make sure all unexpected catches are logged
 
 ## Pubbing
 - Loicence
@@ -43,11 +42,11 @@ Part stockholm syndrome. But also, if you dig into it, ACT is more than just a D
 	- Update and add screenshots
 - contact ACT devs for ACT pub
 
-## Bonus
-- i18n?
-- Improve translation for monster names and skill names
-- Make a user parameter for device selection
+## Bonus / Continuous
 - Show classes&specs in ACT (Turns out the Job column isn't vanilla, it gets added by FFXIV_ACT_Plugin)
+- Improve translation for monster names and skill names
+- i18n?
+- Make a user parameter for device selection
 
 # Shoutouts
 - [AdvancedCombatTracker](https://advancedcombattracker.com/) by EQAditu - (duh)
