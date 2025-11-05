@@ -12,9 +12,7 @@ namespace BPSR_ACT_Plugin
 
         static BPSR_ACT_Plugin()
         {
-            // Register resolver for loading bundled assemblies from a subfolder (Plugins\BPSR_ACT_Plugin)
             AppDomain.CurrentDomain.AssemblyResolve += AssemblyHelper.CurrentDomain_AssemblyResolve;
-            AssemblyHelper.TryPreloadPluginAssemblies();
         }
 
         public void InitPlugin(TabPage pluginScreenSpace, Label pluginStatusText)
