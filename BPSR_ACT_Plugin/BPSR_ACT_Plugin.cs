@@ -33,6 +33,9 @@ namespace BPSR_ACT_Plugin
             PacketCaptureHandler.OnPayloadReady += BPSRPacketHandler.PayloadReady;
             BPSRPacketHandler.OnLogMasterSwing += ACTLogHandler.LogMasterSwing;
 
+            //TODO: Set correct zone when possible
+            ActGlobals.oFormActMain.ChangeZone("Blue Protocol: Star Resonnance");
+
             SharpPcapHandler.StartListening();
 
             _pluginStatusLabel.Text = "BPSR_ACT_Plugin initialized.";

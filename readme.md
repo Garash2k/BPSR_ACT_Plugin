@@ -22,13 +22,11 @@ Part stockholm syndrome. But also, if you dig into it, ACT is more than just a D
 
 # TODOs:
 
-## Req before being happy with personal use
-- Handle zones
-
 ## Req before ideally pubbing on github
 - Code quality: PacketCaptureHandler
 	- Consider giving it it's offline timer back
 - Code quality: BPSRPacketHandler
+	- Improve the log string
 - Code quality: ACTLogHandler / UILabelHelper
 - Double checks longs vs ulongs
 - Make sure all unexpected catches are logged
@@ -41,6 +39,7 @@ Part stockholm syndrome. But also, if you dig into it, ACT is more than just a D
 - contact ACT devs for ACT pub
 
 ## Bonus / Continuous
+- Actually handle zones and not have it just be Blue Protocol: Star Resonnance
 - Show classes&specs in ACT (Turns out the Job column isn't vanilla, it gets added by FFXIV_ACT_Plugin)
 - Treat lucky procs the same way FFXIV_ACT_Plugin treats Direct Hits
 - Improve translation for monster names and skill names
