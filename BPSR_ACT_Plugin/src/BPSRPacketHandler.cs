@@ -16,8 +16,6 @@ namespace BPSR_ACT_Plugin.src
         public static Action<string> OnLogStatus;
         public static Action<MasterSwing, bool> OnLogMasterSwing;
 
-        public static long _currentUserUuid = 0;
-
         public static void OnPayloadReady(uint methodId, byte[] payload)
         {
             switch ((NotifyMethod)methodId)
@@ -29,7 +27,9 @@ namespace BPSR_ACT_Plugin.src
                     _processSyncContainerData(payload);
                     break;
                 case NotifyMethod.SyncContainerDirtyData:
-                    _processSyncContainerDirtyData(payload);
+                    //Removing _processSyncContainerDirtyData.
+                    //  It's only use in SRDC was to retreive info about the current player such as their name, AS, job and hp levels.
+                    //  We don't need most of those. For the name, we can just label ourselves as "YOU" FFXIV_ACT_Plugin style.
                     break;
                 case NotifyMethod.SyncToMeDeltaInfo:
                     _processSyncToMeDeltaInfo(payload);
@@ -71,7 +71,7 @@ namespace BPSR_ACT_Plugin.src
                             UILabelHelper.AddAssociation(id, name);
                         }
                         break;
-                    case AttrType.AttrId:   
+                    case AttrType.AttrId:
                         int monsterID = 0;
                         var data = attr.RawData?.ToByteArray();
                         if (data != null && data.Length > 0)
@@ -121,54 +121,6 @@ namespace BPSR_ACT_Plugin.src
             UILabelHelper.AddAssociation(syncContainerData.VData.CharId, syncContainerData.VData.CharBase.Name);
             //TODO: Also associate the class&spec
         }
-        private static void _processSyncContainerDirtyData(byte[] payloadBuffer)
-        {
-            if (_currentUserUuid == 0) return;
-
-            var syncContainerDirtyData = SyncContainerDirtyData.Parser.ParseFrom(payloadBuffer);
-            var buffer = syncContainerDirtyData?.VData?.Buffer;
-
-            if (buffer == null)
-                return;
-
-            try
-            {
-                var bufferBytes = buffer.ToByteArray();
-                var reader = new PacketBinaryReader(bufferBytes);
-
-                if (!DoesStreamHaveIdentifier(reader)) return;
-
-                uint fieldIndex = reader.ReadUInt32LE();
-                reader.ReadInt32BE(); // skip
-
-                switch (fieldIndex)
-                {
-                    case 2: // CharBase
-                        if (!DoesStreamHaveIdentifier(reader)) break;
-
-                        fieldIndex = reader.ReadUInt32LE();
-                        reader.ReadInt32BE(); // skip
-                        switch (fieldIndex)
-                        {
-                            case 5: // Name
-                                string playerName = StreamReadString(reader);
-                                if (string.IsNullOrEmpty(playerName)) break;
-                                long playerUid = _currentUserUuid >> 16;
-                                UILabelHelper.AddAssociation(playerUid, playerName);
-                                break;
-                            default:
-                                break;
-                        }
-                        break;
-                    default:
-                        break;
-                }
-            }
-            catch (Exception ex)
-            {
-                OnLogStatus?.Invoke($"Failed parsing SyncContainerDirtyData buffer: {ex.Message}");
-            }
-        }
 
         private static void _processSyncNearDeltaInfo(byte[] payloadBuffer)
         {
@@ -183,19 +135,19 @@ namespace BPSR_ACT_Plugin.src
         private static void _processSyncToMeDeltaInfo(byte[] payloadBuffer)
         {
             var syncToMeDeltaInfo = SyncToMeDeltaInfo.Parser.ParseFrom(payloadBuffer);
-            
+
             var aoiSyncToMeDelta = syncToMeDeltaInfo.DeltaInfo;
-            
+
             var uuid = aoiSyncToMeDelta.Uuid;
-            if (uuid != 0 && _currentUserUuid != uuid)
+            if (uuid != 0 && UILabelHelper.CurrentUserUuid != uuid)
             {
-                _currentUserUuid = uuid;
-                OnLogStatus?.Invoke("Got player UUID! UUID: " + _currentUserUuid);
+                UILabelHelper.CurrentUserUuid = uuid;
+                OnLogStatus?.Invoke("Got player UUID! UUID: " + UILabelHelper.CurrentUserUuid);
             }
-            
+
             var aoiSyncDelta = aoiSyncToMeDelta.BaseDelta;
             if (aoiSyncDelta == null) return;
-            
+
             _processAoiSyncDelta(aoiSyncDelta);
         }
 
@@ -303,72 +255,6 @@ namespace BPSR_ACT_Plugin.src
             {
                 OnLogStatus?.Invoke($"Error processing SyncDamageInfo: {ex.Message}");
             }
-        }
-
-        // minimal binary reader ported from packet.js BinaryReader
-        private sealed class PacketBinaryReader
-        {
-            private readonly byte[] _buffer;
-            private int _offset;
-
-            public PacketBinaryReader(byte[] buffer, int offset = 0)
-            {
-                _buffer = buffer ?? Array.Empty<byte>();
-                _offset = offset;
-            }
-
-            public int Remaining => _buffer.Length - _offset;
-
-            public uint ReadUInt32LE()
-            {
-                if (Remaining < 4) throw new InvalidOperationException("Insufficient data");
-                uint value = (uint)(_buffer[_offset] | _buffer[_offset + 1] << 8 | _buffer[_offset + 2] << 16 | _buffer[_offset + 3] << 24);
-                _offset += 4;
-                return value;
-            }
-
-            public int ReadInt32BE()
-            {
-                if (Remaining < 4) throw new InvalidOperationException("Insufficient data");
-                int value = _buffer[_offset] << 24 | _buffer[_offset + 1] << 16 | _buffer[_offset + 2] << 8 | _buffer[_offset + 3];
-                _offset += 4;
-                return value;
-            }
-
-            public byte[] ReadBytes(int length)
-            {
-                if (length < 0 || Remaining < length) throw new InvalidOperationException("Insufficient data");
-                var res = new byte[length];
-                Array.Copy(_buffer, _offset, res, 0, length);
-                _offset += length;
-                return res;
-            }
-        }
-
-        private static bool DoesStreamHaveIdentifier(PacketBinaryReader reader)
-        {
-            try
-            {
-                var identifier = reader.ReadUInt32LE();
-                reader.ReadInt32BE();
-                if (identifier != 0xfffffffe) return false;
-                identifier = (uint)reader.ReadInt32BE();
-                reader.ReadInt32BE();
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-        private static string StreamReadString(PacketBinaryReader reader)
-        {
-            var length = (int)reader.ReadUInt32LE();
-            reader.ReadInt32BE();
-            var buffer = reader.ReadBytes(length);
-            reader.ReadInt32BE();
-            return Encoding.UTF8.GetString(buffer);
         }
     }
 

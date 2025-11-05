@@ -179,6 +179,8 @@ namespace BPSR_ACT_Plugin.src
 
         private static Dictionary<long, string> _ID_Name_Association = new Dictionary<long, string>();
 
+        public static long CurrentUserUuid { get; internal set; } = 0;
+
         public static void AddAssociation(long id, string name)
         {
             if (!_ID_Name_Association.ContainsKey(id))
@@ -194,6 +196,10 @@ namespace BPSR_ACT_Plugin.src
 
         public static string GetAssociation(long uid, bool isPlayer)
         {
+            if (CurrentUserUuid >> 16 == uid)
+            {
+                return "YOU";
+            }
             if (_ID_Name_Association.TryGetValue(uid, out var name))
             {
                 return name;
