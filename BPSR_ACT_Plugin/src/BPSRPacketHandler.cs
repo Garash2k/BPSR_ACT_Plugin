@@ -11,12 +11,16 @@ using Google.Protobuf.Collections;
 
 namespace BPSR_ACT_Plugin.src
 {
+    /// <summary>
+    /// Provides functionality for handling and processing Blue Protocol packets.
+    /// Receives them via PayloadReady, then exports events via OnLogMasterSwing
+    /// </summary>
     internal static class BPSRPacketHandler
     {
         public static Action<string> OnLogStatus;
         public static Action<MasterSwing, bool> OnLogMasterSwing;
 
-        public static void OnPayloadReady(uint methodId, byte[] payload)
+        public static void PayloadReady(uint methodId, byte[] payload)
         {
             switch ((NotifyMethod)methodId)
             {
@@ -242,7 +246,7 @@ namespace BPSR_ACT_Plugin.src
                 string srcStr = UILabelHelper.GetAssociation(uuid: attacker);
                 string tgtStr = UILabelHelper.GetAssociation(uid: (long)targetUid, isTargetPlayer);
 
-                int swingType = isHeal ? ACTLogHelper.HealingSwingType : (int)SwingTypeEnum.NonMelee;
+                int swingType = isHeal ? ACTLogHandler.HealingSwingType : (int)SwingTypeEnum.NonMelee;
 
                 //TODO: Understand why true isCrits don't show up as crits
                 OnLogMasterSwing?.Invoke(new MasterSwing(swingType, isCrit, string.Join(",", extras), damage, DateTime.Now, 0, UILabelHelper.GetSkillName(skillId), srcStr, UILabelHelper.GetElementName(dmg.Property), tgtStr), isDead);

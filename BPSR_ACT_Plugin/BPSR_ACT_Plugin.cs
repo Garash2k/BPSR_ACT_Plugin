@@ -5,34 +5,37 @@ using BPSR_ACT_Plugin.src;
 
 namespace BPSR_ACT_Plugin
 {
+    /// <summary>
+    /// Entry point for our plugin.
+    /// </summary>
     public class BPSR_ACT_Plugin : IActPluginV1
     {
-        private Label pluginStatusLabel;
-        private TextBox statusBox;
-
         static BPSR_ACT_Plugin()
         {
             AppDomain.CurrentDomain.AssemblyResolve += AssemblyHelper.CurrentDomain_AssemblyResolve;
         }
 
+        private Label _pluginStatusLabel;
+        private TextBox _statusLogBox;
+
         public void InitPlugin(TabPage pluginScreenSpace, Label pluginStatusText)
         {
-            pluginStatusLabel = pluginStatusText;
-            pluginStatusLabel.Text = "Initializing BPSR_ACT_Plugin...";
+            _pluginStatusLabel = pluginStatusText;
+            _pluginStatusLabel.Text = "Initializing BPSR_ACT_Plugin...";
 
             InitStatusBox(pluginScreenSpace);
 
             SharpPcapHandler.OnLogStatus += LogStatus;
-            PacketCaptureHelper.OnLogStatus += LogStatus;
+            PacketCaptureHandler.OnLogStatus += LogStatus;
             BPSRPacketHandler.OnLogStatus += LogStatus;
 
-            SharpPcapHandler.OnPacketArrival += PacketCaptureHelper.Device_OnPacketArrival;
-            PacketCaptureHelper.OnPayloadReady += BPSRPacketHandler.OnPayloadReady;
-            BPSRPacketHandler.OnLogMasterSwing += ACTLogHelper.LogMasterSwing;
+            SharpPcapHandler.OnPacketArrival += PacketCaptureHandler.PacketArrival;
+            PacketCaptureHandler.OnPayloadReady += BPSRPacketHandler.PayloadReady;
+            BPSRPacketHandler.OnLogMasterSwing += ACTLogHandler.LogMasterSwing;
 
             SharpPcapHandler.StartListening();
 
-            pluginStatusLabel.Text = "BPSR_ACT_Plugin initialized.";
+            _pluginStatusLabel.Text = "BPSR_ACT_Plugin initialized.";
             LogStatus("Plugin initialized.");
         }
 
@@ -63,18 +66,18 @@ namespace BPSR_ACT_Plugin
             pluginScreenSpace.Controls.Add(panel);
 
             // Save reference for status updates
-            this.statusBox = statusBox;
+            this._statusLogBox = statusBox;
         }
 
         public void LogStatus(string message)
         {
-            statusBox?.AppendText(message + "\r\n");
+            _statusLogBox?.AppendText(message + "\r\n");
         }
 
         public void DeInitPlugin()
         {
             SharpPcapHandler.StopListening();
-            pluginStatusLabel.Text = "BPSR_ACT_Plugin stopped.";
+            _pluginStatusLabel.Text = "BPSR_ACT_Plugin stopped.";
         }
     }
 }

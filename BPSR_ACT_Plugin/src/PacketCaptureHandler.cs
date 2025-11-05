@@ -10,7 +10,11 @@ using ZstdSharp;
 
 namespace BPSR_ACT_Plugin.src
 {
-    internal static class PacketCaptureHelper
+    /// <summary>
+    /// Receives raw network packets from SharpPcap (PacketArrival) and processes them to extract application-layer payloads (OnPayloadReady.)
+    /// TODO: Refactor this hellish vibe code
+    /// </summary>
+    internal static class PacketCaptureHandler
     {
         public static Action<string> OnLogStatus;
 
@@ -39,7 +43,7 @@ namespace BPSR_ACT_Plugin.src
         private static DateTime _tcpLastTime = DateTime.MinValue;
         private static readonly object _tcpLock = new object();
 
-        static PacketCaptureHelper()
+        static PacketCaptureHandler()
         {
             //TODO: Re-code a timer to handle "Cannot capture the next packet! Is the game closed or disconnected?"
         }
@@ -233,7 +237,7 @@ namespace BPSR_ACT_Plugin.src
             }
         }
 
-        public static void Device_OnPacketArrival(object s, PacketCapture e)
+        public static void PacketArrival(object s, PacketCapture e)
         {
             try
             {

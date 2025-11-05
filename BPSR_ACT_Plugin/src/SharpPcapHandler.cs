@@ -8,6 +8,9 @@ using SharpPcap.LibPcap;
 
 namespace BPSR_ACT_Plugin.src
 {
+    /// <summary>
+    /// Using SharpPcap, provides functionality to begin packet capture (StartListening) and forward them (OnPacketArrival).
+    /// </summary>
     internal static class SharpPcapHandler
     {
         private static LibPcapLiveDevice _device;

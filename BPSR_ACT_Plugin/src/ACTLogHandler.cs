@@ -8,7 +8,10 @@ using Advanced_Combat_Tracker;
 
 namespace BPSR_ACT_Plugin.src
 {
-    internal static class ACTLogHelper
+    /// <summary>
+    /// Receives combat actions via LogMasterSwing and logs them into ACT.
+    /// </summary>
+    internal static class ACTLogHandler
     {
         private static int? _healingSwingType;
         /// <summary>
