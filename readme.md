@@ -26,6 +26,7 @@ Part stockholm syndrome. But also, if you dig into it, ACT is more than just a D
 - Code quality: BPSRPacketHandler
 	- Improve the log string
 - Code quality: ACTLogHandler / UILabelHelper
+	- Centralized object for caching an entity's name, uuid, uid, player/monster and class.
 - Double checks longs vs ulongs
 - Make sure all unexpected catches are logged
 - Use an ILogger abstraction instead of Action<string>
