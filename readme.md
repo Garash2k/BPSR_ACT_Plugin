@@ -36,6 +36,7 @@ Part stockholm syndrome. But also, if you dig into it, ACT is more than just a D
 - Loicence
 - readme.md
 	- Update and add screenshots
+ 	- Update credits
 - contact ACT devs for ACT pub
 
 ## Bonus / Continuous
