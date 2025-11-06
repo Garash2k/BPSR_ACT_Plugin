@@ -23,13 +23,12 @@ Part stockholm syndrome. But also, if you dig into it, ACT is more than just a D
 # TODOs:
 
 ## Req before ideally pubbing on github
-- Code quality: PacketCaptureHandler
-	- Consider giving it it's offline timer back
 - Code quality: BPSRPacketHandler
 	- Improve the log string
 - Code quality: ACTLogHandler / UILabelHelper
 - Double checks longs vs ulongs
 - Make sure all unexpected catches are logged
+- Use an ILogger abstraction instead of Action<string>
 
 ## Pubbing
 - Loicence

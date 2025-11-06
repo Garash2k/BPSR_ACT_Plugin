@@ -14,7 +14,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="AdvancedCombatTracker" Version="3.8.2.285" />
+	  <PackageReference Include="AdvancedCombatTracker" Version="3.8.4.287" />
 	  <PackageReference Include="SharpPcap" Version="6.3.1" />
 	  <PackageReference Include="ZstdSharp.Port" Version="0.8.6" />
 	</ItemGroup>

@@ -13,9 +13,10 @@ namespace BPSR_ACT_Plugin.src
     /// </summary>
     internal static class SharpPcapHandler
     {
-        private static LibPcapLiveDevice _device;
-
         public static Action<string> OnLogStatus;
+        public static event PacketArrivalEventHandler OnPacketArrival;
+
+        private static LibPcapLiveDevice _device;
 
         public static void StartListening()
         {
@@ -38,8 +39,6 @@ namespace BPSR_ACT_Plugin.src
 
             _device.StartCapture();
         }
-
-        public static event PacketArrivalEventHandler OnPacketArrival;
 
         public static void StopListening()
         {

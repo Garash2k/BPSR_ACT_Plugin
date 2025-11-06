@@ -20,15 +20,17 @@ namespace BPSR_ACT_Plugin.src
         public static Action<string> OnLogStatus;
         public static Action<MasterSwing, bool> OnLogMasterSwing;
 
-        public static void PayloadReady(uint methodId, byte[] payload)
+        public static void PayloadReady(uint methodId, ReadOnlyMemory<byte> payload)
         {
+            var spanPayload = payload.Span;
+
             switch ((NotifyMethod)methodId)
             {
                 case NotifyMethod.SyncNearEntities:
-                    _processSyncNearEntities(payload);
+                    _processSyncNearEntities(spanPayload);
                     break;
                 case NotifyMethod.SyncContainerData:
-                    _processSyncContainerData(payload);
+                    _processSyncContainerData(spanPayload);
                     break;
                 case NotifyMethod.SyncContainerDirtyData:
                     //Removing _processSyncContainerDirtyData.
@@ -36,10 +38,10 @@ namespace BPSR_ACT_Plugin.src
                     //  We don't need most of those. For the name, we can just label ourselves as "YOU" FFXIV_ACT_Plugin style.
                     break;
                 case NotifyMethod.SyncToMeDeltaInfo:
-                    _processSyncToMeDeltaInfo(payload);
+                    _processSyncToMeDeltaInfo(spanPayload);
                     break;
                 case NotifyMethod.SyncNearDeltaInfo:
-                    _processSyncNearDeltaInfo(payload);
+                    _processSyncNearDeltaInfo(spanPayload);
                     break;
                 default:
                     //this.logger.debug(`Skipping NotifyMsg with methodId ${ methodId}`);
@@ -47,7 +49,7 @@ namespace BPSR_ACT_Plugin.src
             }
         }
 
-        private static void _processSyncNearEntities(byte[] payloadBuffer)
+        private static void _processSyncNearEntities(ReadOnlySpan<byte> payloadBuffer)
         {
             var syncNearEntities = SyncNearEntities.Parser.ParseFrom(payloadBuffer);
 
@@ -115,7 +117,7 @@ namespace BPSR_ACT_Plugin.src
             }
         }
 
-        private static void _processSyncContainerData(byte[] payloadBuffer)
+        private static void _processSyncContainerData(ReadOnlySpan<byte> payloadBuffer)
         {
             var syncContainerData = SyncContainerData.Parser.ParseFrom(payloadBuffer);
 
@@ -126,7 +128,7 @@ namespace BPSR_ACT_Plugin.src
             //TODO: Also associate the class&spec
         }
 
-        private static void _processSyncNearDeltaInfo(byte[] payloadBuffer)
+        private static void _processSyncNearDeltaInfo(ReadOnlySpan<byte> payloadBuffer)
         {
             var syncNearDeltaInfo = SyncNearDeltaInfo.Parser.ParseFrom(payloadBuffer);
 
@@ -136,7 +138,7 @@ namespace BPSR_ACT_Plugin.src
             }
         }
 
-        private static void _processSyncToMeDeltaInfo(byte[] payloadBuffer)
+        private static void _processSyncToMeDeltaInfo(ReadOnlySpan<byte> payloadBuffer)
         {
             var syncToMeDeltaInfo = SyncToMeDeltaInfo.Parser.ParseFrom(payloadBuffer);
 

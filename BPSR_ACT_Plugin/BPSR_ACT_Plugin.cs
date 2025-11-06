@@ -28,6 +28,7 @@ namespace BPSR_ACT_Plugin
             SharpPcapHandler.OnLogStatus += LogStatus;
             PacketCaptureHandler.OnLogStatus += LogStatus;
             BPSRPacketHandler.OnLogStatus += LogStatus;
+            TcpReassembler.OnLogStatus += LogStatus;
 
             SharpPcapHandler.OnPacketArrival += PacketCaptureHandler.PacketArrival;
             PacketCaptureHandler.OnPayloadReady += BPSRPacketHandler.PayloadReady;
