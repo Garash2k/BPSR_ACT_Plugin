@@ -53,5 +53,6 @@ Part stockholm syndrome. But also, if you dig into it, ACT is more than just a D
 - [Blue Protocol Data Analysis](https://github.com/Zaarrg/BlueProtocolStarResonanceDataAnalysis) by Zaarrg's for some translation data
 - Used Nuget libraries
 	- [SharpPcap](https://www.nuget.org/packages/SharpPcap) by Tamir Gal, Chris Morgan and others
+ 	- [PacketDotNet](https://www.nuget.org/packages/packetdotnet/) originally by Chris Morgan
 	- [ZstdSharp.Port](https://www.nuget.org/packages/ZstdSharp.Port) by Oleg Stepanischev
 	- [AdvancedCombatTracker](https://www.nuget.org/packages/AdvancedCombatTracker) by bnVi
