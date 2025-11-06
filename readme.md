@@ -30,7 +30,6 @@ Part stockholm syndrome. But also, if you dig into it, ACT is more than just a D
 - Code quality: ACTLogHandler / UILabelHelper
 - Double checks longs vs ulongs
 - Make sure all unexpected catches are logged
-- Write a readme for BPSR_ProtocolBuffer / Test again that it can't be in the main project
 
 ## Pubbing
 - Loicence
