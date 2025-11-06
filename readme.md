@@ -23,6 +23,7 @@ Part stockholm syndrome. But also, if you dig into it, ACT is more than just a D
 # TODOs:
 
 ## Req before ideally pubbing on github
+- Remove the `bool detected` return
 - Code quality: BPSRPacketHandler
 	- Improve the log string
 - Code quality: ACTLogHandler / UILabelHelper
