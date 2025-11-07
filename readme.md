@@ -23,7 +23,6 @@ Part stockholm syndrome. But also, if you dig into it, ACT is more than just a D
 # TODOs:
 
 ## Req before ideally pubbing on github
-- Remove the `bool detected` return
 - Code quality: BPSRPacketHandler
 	- Improve the log string
 - Code quality: ACTLogHandler / UILabelHelper
@@ -31,6 +30,8 @@ Part stockholm syndrome. But also, if you dig into it, ACT is more than just a D
 - Double checks longs vs ulongs
 - Make sure all unexpected catches are logged
 - Use an ILogger abstraction instead of Action<string>
+- Why did death reports and lookup damage by combatant stop working
+- Better autodetection + make a user parameter for device selection
 
 ## Pubbing
 - Loicence
@@ -40,7 +41,6 @@ Part stockholm syndrome. But also, if you dig into it, ACT is more than just a D
 - contact ACT devs for ACT pub
 
 ## Bonus / Continuous
-- Better autodetection + make a user parameter for device selection
 - Show classes&specs in ACT (Turns out the Job column isn't vanilla, it gets added by FFXIV_ACT_Plugin)
 - Actually handle zones and not have it just be Blue Protocol: Star Resonnance
 - Treat lucky procs the same way FFXIV_ACT_Plugin treats Direct Hits

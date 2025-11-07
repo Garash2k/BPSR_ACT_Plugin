@@ -132,25 +132,17 @@ namespace BPSR_ACT_Plugin.src
                 string srcServerRe = $"{dst}:{dstPort} -> {src}:{srcPort}";
 
                 // first, do detection under lock and possibly clear state
-                bool detected = false;
                 lock (_tcpLock)
                 {
                     // If current_server unknown, attempt detection with small packets (FrameDown Notify signature / Login return / FrameUp)
                     if (string.IsNullOrEmpty(_currentServer) || _currentServer != srcServer && _currentServer != srcServerRe)
                     {
                         DetectSceneServerFromPayload(appPayload.AsSpan(), srcServer, srcServerRe);
-
-                        // If we've just detected server we return (mirror JS branch that returns early)
-                        if (!string.IsNullOrEmpty(_currentServer))
-                        {
-                            detected = true;
-                        }
                     } // end current_server detection block
 
                     // mark last-received time for inactivity detection
                     _lastPacketReceived = DateTime.UtcNow;
                 } // end tcp lock
-                if (detected) return;
 
                 try
                 {
