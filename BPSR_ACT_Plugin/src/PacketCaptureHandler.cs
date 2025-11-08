@@ -43,6 +43,10 @@ namespace BPSR_ACT_Plugin.src
             0x0a,0x4e,0x08,0x01,0x22,0x24
         };
 
+        private const ushort MessageType_Notify = 2;
+        private const ushort MessageType_Return = 3;
+        private const ushort MessageType_FrameDown = 6;
+
         static PacketCaptureHandler()
         {
             // Start periodic inactivity check.
@@ -270,7 +274,7 @@ namespace BPSR_ACT_Plugin.src
                 while (offset + 4 <= total)
                 {
                     // Peek size (big-endian)
-                    uint packetSize = BinaryPrimitives.ReadUInt32BigEndian(packets.Slice(offset, 4));
+                    int packetSize = (int)BinaryPrimitives.ReadUInt32BigEndian(packets.Slice(offset, 4));
                     if (packetSize < 6)
                     {
                         OnLogStatus?.Invoke("Received invalid packet (size < 6)");
@@ -287,7 +291,7 @@ namespace BPSR_ACT_Plugin.src
                     int inner = pktStart + 4; // skip size field
 
                     // Read packetType (uint16)
-                    if (inner + 2 > pktStart + (int)packetSize)
+                    if (inner + 2 > pktStart + packetSize)
                     {
                         // malformed packet, stop
                         break;
@@ -298,16 +302,12 @@ namespace BPSR_ACT_Plugin.src
                     bool isZstdCompressed = (packetType & 0x8000) != 0;
                     ushort msgTypeId = (ushort)(packetType & 0x7fff);
 
-                    const ushort MessageType_Notify = 2;
-                    const ushort MessageType_Return = 3;
-                    const ushort MessageType_FrameDown = 6;
-
                     switch (msgTypeId)
                     {
                         case MessageType_Notify:
                             {
                                 int payloadOffset = inner;
-                                int payloadLength = pktStart + (int)packetSize - payloadOffset;
+                                int payloadLength = pktStart + packetSize - payloadOffset;
                                 if (payloadLength > 0)
                                 {
                                     // Process notify up to (but not dispatching by methodId)
@@ -321,9 +321,9 @@ namespace BPSR_ACT_Plugin.src
                         case MessageType_FrameDown:
                             {
                                 // serverSequenceId - can be read but not used here
-                                if (inner + 4 > pktStart + (int)packetSize) break;
+                                if (inner + 4 > pktStart + packetSize) break;
                                 inner += 4;
-                                int rem = pktStart + (int)packetSize - inner;
+                                int rem = pktStart + packetSize - inner;
                                 if (rem <= 0) break;
 
                                 // If not compressed, avoid the intermediate allocation and recursively process the nested slice.
@@ -347,7 +347,7 @@ namespace BPSR_ACT_Plugin.src
                             break;
                     }
 
-                    offset += (int)packetSize;
+                    offset += packetSize;
                 }
             }
             catch (Exception ex)
