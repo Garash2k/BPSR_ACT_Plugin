@@ -12,13 +12,22 @@ namespace BPSR_ACT_Plugin.src
     {
         public static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
         {
-            var name = new AssemblyName(args.Name).Name;
-            var dllFilePath = Path.Combine(
-                ActGlobals.oFormActMain.AppDataFolder.FullName,
-                "Plugins",
-                "BPSR_ACT_Plugin",
-                $"{name}.dll");
-            return Assembly.LoadFrom(dllFilePath);
+            try
+            {
+
+                var name = new AssemblyName(args.Name).Name;
+                var dllFilePath = Path.Combine(
+                    ActGlobals.oFormActMain.AppDataFolder.FullName,
+                    "Plugins",
+                    "BPSR_ACT_Plugin",
+                    $"{name}.dll");
+                return Assembly.LoadFrom(dllFilePath);
+            }
+            catch (Exception)
+            {
+                //Happens too soon to log
+                return null;
+            }
         }
     }
 }

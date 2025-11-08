@@ -12,7 +12,7 @@ namespace BPSR_ACT_Plugin
     {
         static BPSR_ACT_Plugin()
         {
-            AppDomain.CurrentDomain.AssemblyResolve += AssemblyHelper.CurrentDomain_AssemblyResolve;
+            AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(AssemblyHelper.CurrentDomain_AssemblyResolve);
         }
 
         private Label _pluginStatusLabel;

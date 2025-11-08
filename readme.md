@@ -30,7 +30,6 @@ Part stockholm syndrome. But also, if you dig into it, ACT is more than just a D
 - Double checks longs vs ulongs
 - Make sure all unexpected catches are logged
 - Use an ILogger abstraction instead of Action<string>
-- Why did death reports and lookup damage by combatant stop working
 - Better autodetection + make a user parameter for device selection
 
 ## Pubbing
