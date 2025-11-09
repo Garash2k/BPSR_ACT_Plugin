@@ -255,11 +255,11 @@ namespace BPSR_ACT_Plugin.src
                         0,
                         UILabelHelper.GetSkillName(dmg.OwnerId),
                         srcStr,
-                        UILabelHelper.GetElementName(dmg.Property),
+                        ((EDamageProperty)dmg.Property).ToString(),
                         tgtStr),
                     dmg.IsDead);
 
-                OnLogStatus?.Invoke($"[{(isHeal ? "HEAL" : "DMG")}] DS:{(EDamageSource)dmg.DamageSource} TGT: {tgtStr} ID:{dmg.OwnerId} VAL:{damage} HPLSN:{dmg.HpLessenValue} ELEM: {UILabelHelper.GetElementName(dmg.Property)} EXT:{string.Join(" | ", extras)}");
+                OnLogStatus?.Invoke($"[{(isHeal ? "HEAL" : "DMG")}] DS:{(EDamageSource)dmg.DamageSource} TGT: {tgtStr} ID:{dmg.OwnerId} VAL:{damage} HPLSN:{dmg.HpLessenValue} ELEM: {(EDamageProperty)dmg.Property} EXT:{string.Join(" | ", extras)}");
             }
             catch (Exception ex)
             {
@@ -298,4 +298,18 @@ namespace BPSR_ACT_Plugin.src
         FakeBullet = 4,
         Other = 100,
     };
+
+    internal enum EDamageProperty
+    {
+        General = 0,
+        Fire = 1,
+        Water = 2,
+        Electricity = 3,
+        Wood = 4,
+        Wind = 5,
+        Rock = 6,
+        Light = 7,
+        Dark = 8,
+        Count = 9,
+    }
 }

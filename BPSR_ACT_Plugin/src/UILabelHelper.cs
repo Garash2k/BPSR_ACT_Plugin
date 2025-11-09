@@ -123,49 +123,6 @@ namespace BPSR_ACT_Plugin.src
             }
         }
 
-        public static string GetElementName(int property)
-        {
-            switch ((EDamageProperty)property)
-            {
-                case EDamageProperty.General:
-                    return "General";
-                case EDamageProperty.Fire:
-                    return "Fire";
-                case EDamageProperty.Water:
-                    return "Water";
-                case EDamageProperty.Electricity:
-                    return "Electricity";
-                case EDamageProperty.Wood:
-                    return "Wood";
-                case EDamageProperty.Wind:
-                    return "Wind";
-                case EDamageProperty.Rock:
-                    return "Rock";
-                case EDamageProperty.Light:
-                    return "Light";
-                case EDamageProperty.Dark:
-                    return "Dark";
-                case EDamageProperty.Count:
-                    return "Count";
-                default:
-                    return "General";
-            }
-        }
-
-        private enum EDamageProperty
-        {
-            General = 0,
-            Fire = 1,
-            Water = 2,
-            Electricity = 3,
-            Wood = 4,
-            Wind = 5,
-            Rock = 6,
-            Light = 7,
-            Dark = 8,
-            Count = 9,
-        }
-
         public static long CurrentUserUuid { get; internal set; } = 0;
 
         private static Dictionary<long, Player> _players = new Dictionary<long, Player>();
