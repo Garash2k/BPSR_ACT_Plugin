@@ -14,6 +14,7 @@ namespace BPSR_ACT_Plugin.src
     /// <summary>
     /// Provides functionality for handling and processing Blue Protocol packets.
     /// Receives them via PayloadReady, then exports events via OnLogMasterSwing
+    /// Mostly ported from SRDC's packet.js
     /// </summary>
     internal static class BPSRPacketHandler
     {
@@ -27,10 +28,10 @@ namespace BPSR_ACT_Plugin.src
             switch ((NotifyMethod)methodId)
             {
                 case NotifyMethod.SyncNearEntities:
-                    _processSyncNearEntities(spanPayload);
+                    ProcessSyncNearEntities(spanPayload);
                     break;
                 case NotifyMethod.SyncContainerData:
-                    _processSyncContainerData(spanPayload);
+                    ProcessSyncContainerData(spanPayload);
                     break;
                 case NotifyMethod.SyncContainerDirtyData:
                     //Removing _processSyncContainerDirtyData.
@@ -38,31 +39,43 @@ namespace BPSR_ACT_Plugin.src
                     //  We don't need most of those. For the name, we can just label ourselves as "YOU" FFXIV_ACT_Plugin style.
                     break;
                 case NotifyMethod.SyncToMeDeltaInfo:
-                    _processSyncToMeDeltaInfo(spanPayload);
+                    ProcessSyncToMeDeltaInfo(spanPayload);
                     break;
                 case NotifyMethod.SyncNearDeltaInfo:
-                    _processSyncNearDeltaInfo(spanPayload);
+                    ProcessSyncNearDeltaInfo(spanPayload);
                     break;
                 default:
-                    //this.logger.debug(`Skipping NotifyMsg with methodId ${ methodId}`);
+                    //OnLogStatus?.Invoke($"Skipping NotifyMsg with methodId {methodId}");
                     break;
             }
         }
 
-        private static void _processSyncNearEntities(ReadOnlySpan<byte> payloadBuffer)
+        private static void ProcessSyncNearEntities(ReadOnlySpan<byte> payloadBuffer)
         {
             var syncNearEntities = SyncNearEntities.Parser.ParseFrom(payloadBuffer);
+
+            //TODO: Confirm that handling disappear is not needed.
 
             if (syncNearEntities?.Appear == null)
                 return;
 
             foreach (var entity in syncNearEntities?.Appear)
             {
-                AddNameFromAttr(entity.Uuid >> 16, entity.Attrs.Attrs);
+                switch ((EEntityType)entity.EntType)
+                {
+                    case EEntityType.EntMonster:
+                        ProcessEnemyAttrs(entity.Uuid, entity.Attrs.Attrs);
+                        break;
+                    case EEntityType.EntChar:
+                        ProcessPlayerAttrs(entity.Uuid >> 16, entity.Attrs.Attrs);
+                        break;
+                    default:
+                        break;
+                }
             }
         }
 
-        private static void AddNameFromAttr(long id, RepeatedField<Attr> attrs)
+        private static void ProcessPlayerAttrs(long uid, RepeatedField<Attr> attrs)
         {
             foreach (var attr in attrs)
             {
@@ -74,112 +87,99 @@ namespace BPSR_ACT_Plugin.src
                         {
                             name = Regex.Replace(name, @"\p{Cc}+", string.Empty);
                             name = Regex.Replace(name, @"\s+", " ").Trim();
-                            UILabelHelper.AddAssociation(id, name);
-                        }
-                        break;
-                    case AttrType.AttrId:
-                        int monsterID = 0;
-                        var data = attr.RawData?.ToByteArray();
-                        if (data != null && data.Length > 0)
-                        {
-                            monsterID = new CodedInputStream(data).ReadInt32();
-                            UILabelHelper.AddAssociation(id, UILabelHelper.GetMonsterName(monsterID));
+                            UILabelHelper.AddUpdatePlayerName(uid, name);
                         }
                         break;
                     case AttrType.AttrProfessionId:
-                        break;
-                    case AttrType.AttrFightPoint:
-                        break;
-                    case AttrType.AttrLevel:
-                        break;
-                    case AttrType.AttrRankLevel:
-                        break;
-                    case AttrType.AttrCri:
-                        break;
-                    case AttrType.AttrLucky:
-                        break;
-                    case AttrType.AttrHp:
-                        break;
-                    case AttrType.AttrMaxHp:
-                        break;
-                    case AttrType.AttrElementFlag:
-                        break;
-                    case AttrType.AttrReductionLevel:
-                        break;
-                    case AttrType.AttrReduntionId:
-                        break;
-                    case AttrType.AttrEnergyFlag:
-                        break;
-                    default:
+                        var classID = new CodedInputStream(attr.RawData?.ToByteArray()).ReadInt32();
+                        string className = attr.RawData?.ToStringUtf8();
+                        UILabelHelper.AddUpdatePlayerClass(uid, classID);
                         break;
                 }
-                //TODO: Also associate the class&spec
             }
         }
 
-        private static void _processSyncContainerData(ReadOnlySpan<byte> payloadBuffer)
+        private static void ProcessEnemyAttrs(long uuid, RepeatedField<Attr> attrs)
+        {
+            foreach (var attr in attrs)
+            {
+                switch ((AttrType)attr.Id)
+                {
+                    case AttrType.AttrName:
+                        string name = attr.RawData?.ToStringUtf8();
+                        if (!string.IsNullOrEmpty(name))
+                        {
+                            name = Regex.Replace(name, @"\p{Cc}+", string.Empty);
+                            name = Regex.Replace(name, @"\s+", " ").Trim();
+                            UILabelHelper.AddUpdateMonsterName(uuid, name);
+                        }
+                        break;
+                    case AttrType.AttrId:
+                        var monsterID = new CodedInputStream(attr.RawData?.ToByteArray()).ReadInt32();
+                        UILabelHelper.AddUpdateMonsterName(uuid, UILabelHelper.GetMonsterName(monsterID));
+                        break;
+                }
+            }
+        }
+
+        private static void ProcessSyncContainerData(ReadOnlySpan<byte> payloadBuffer)
         {
             var syncContainerData = SyncContainerData.Parser.ParseFrom(payloadBuffer);
 
             if (syncContainerData?.VData?.CharBase == null)
                 return;
 
-            UILabelHelper.AddAssociation(syncContainerData.VData.CharId, syncContainerData.VData.CharBase.Name);
-            //TODO: Also associate the class&spec
+            UILabelHelper.AddUpdatePlayerName(syncContainerData.VData.CharId, syncContainerData.VData.CharBase.Name);
+            UILabelHelper.AddUpdatePlayerClass(syncContainerData.VData.CharId, syncContainerData.VData.ProfessionList.CurProfessionId);
+
         }
 
-        private static void _processSyncNearDeltaInfo(ReadOnlySpan<byte> payloadBuffer)
+        private static void ProcessSyncNearDeltaInfo(ReadOnlySpan<byte> payloadBuffer)
         {
             var syncNearDeltaInfo = SyncNearDeltaInfo.Parser.ParseFrom(payloadBuffer);
 
             foreach (var deltaInfo in syncNearDeltaInfo.DeltaInfos)
             {
-                _processAoiSyncDelta(deltaInfo);
+                ProcessDeltaInfo(deltaInfo);
             }
         }
 
-        private static void _processSyncToMeDeltaInfo(ReadOnlySpan<byte> payloadBuffer)
+        private static void ProcessSyncToMeDeltaInfo(ReadOnlySpan<byte> payloadBuffer)
         {
             var syncToMeDeltaInfo = SyncToMeDeltaInfo.Parser.ParseFrom(payloadBuffer);
 
-            var aoiSyncToMeDelta = syncToMeDeltaInfo.DeltaInfo;
+            var deltaInfo = syncToMeDeltaInfo.DeltaInfo;
 
-            var uuid = aoiSyncToMeDelta.Uuid;
+            var uuid = deltaInfo.Uuid;
             if (uuid != 0 && UILabelHelper.CurrentUserUuid != uuid)
             {
                 UILabelHelper.CurrentUserUuid = uuid;
                 OnLogStatus?.Invoke("Got player UUID! UUID: " + UILabelHelper.CurrentUserUuid);
             }
 
-            var aoiSyncDelta = aoiSyncToMeDelta.BaseDelta;
+            var aoiSyncDelta = deltaInfo.BaseDelta;
             if (aoiSyncDelta == null) return;
 
-            _processAoiSyncDelta(aoiSyncDelta);
+            ProcessDeltaInfo(aoiSyncDelta);
         }
 
-        // Ported from packet.js PacketProcessor._processAoiSyncDelta
-        private static void _processAoiSyncDelta(AoiSyncDelta aoiSyncDelta)
+        private static void ProcessDeltaInfo(AoiSyncDelta aoiSyncDelta)
         {
             if (aoiSyncDelta == null) return;
 
-            // Read raw UUID from proto (signed long -> interpret as unsigned for bit ops)
-            ulong rawUuid = unchecked((ulong)aoiSyncDelta.Uuid);
-            if (rawUuid == 0) return;
+            var targetUuid = aoiSyncDelta.Uuid;
+            if (targetUuid == 0) return;
 
-            // Some messages sometimes carry a value that is already shifted (JS used shiftRight(16) later).
-            // Be tolerant: check both the raw low16 and the low16 of the value shifted right 16.
-            bool isTargetPlayer = IsUuidPlayer(rawUuid) || IsUuidPlayer(rawUuid >> 16);
-            bool isTargetMonster = IsUuidMonster(rawUuid) || IsUuidMonster(rawUuid >> 16);
-
-            // The canonical target id for logging/lookup should be the entity id (high bits).
-            // JS did: targetUuid = targetUuid.shiftRight(16)
-            ulong targetUid = rawUuid >> 16;
+            var isTargetPlayer = IsUuidPlayer(targetUuid);
+            var isTargetMonster = IsUuidMonster(targetUuid);
 
             var attrCollection = aoiSyncDelta.Attrs;
             if (attrCollection != null)
             {
-                AddNameFromAttr((long)targetUid, attrCollection?.Attrs);
-                //TODO: Also associate the class
+                if (isTargetPlayer)
+                    ProcessPlayerAttrs(targetUuid >> 16, attrCollection?.Attrs);
+                else if (isTargetMonster)
+                    ProcessEnemyAttrs(targetUuid, attrCollection?.Attrs);
             }
 
             var damages = aoiSyncDelta.SkillEffects?.Damages;
@@ -190,21 +190,27 @@ namespace BPSR_ACT_Plugin.src
 
             foreach (var damage in damages)
             {
-                ProcessSyncDamageInfo(damage, isTargetPlayer, isTargetMonster, targetUid);
+                ProcessSyncDamageInfo(damage, isTargetPlayer, isTargetMonster, targetUuid);
             }
         }
 
-        // Helper to determine whether UUID corresponds to player or monster (matches JS checks)
-        public static bool IsUuidPlayer(ulong uuid) => (uuid & 0xffffUL) == 640UL;
-        private static bool IsUuidMonster(ulong uuid) => (uuid & 0xffffUL) == 64UL;
+        public static bool IsUuidPlayer(long uuid)
+        {
+            return (uuid & 0xffffL) == 640L;
+        }
+        private static bool IsUuidMonster(long uuid)
+        {
+            var low = uuid & 0xffffL;
+            return low == 64L || low == 32832L;
+        }
 
-        // Processes a single SyncDamageInfo
-        private static void ProcessSyncDamageInfo(SyncDamageInfo dmg, bool isTargetPlayer, bool isTargetMonster, ulong targetUid)
+        private static void ProcessSyncDamageInfo(SyncDamageInfo dmg, bool isTargetPlayer, bool isTargetMonster, long targetUuid)
         {
             if (dmg == null) return;
 
             try
             {
+                //TODO: 2nd code review pass
                 int skillId = 0;
                 try { skillId = dmg.OwnerId; } catch { /* ignore */ }
 
@@ -225,8 +231,8 @@ namespace BPSR_ACT_Plugin.src
                 try { typeFlag = dmg.TypeFlag; } catch { }
                 bool isDead = false;
                 try { isDead = Convert.ToBoolean(dmg.IsDead); } catch { }
-                int damageSource = 0;
-                try { damageSource = dmg.DamageSource; } catch { }
+                EDamageSource damageSource = 0;
+                try { damageSource = (EDamageSource)dmg.DamageSource; } catch { }
 
                 bool isCrit = (typeFlag & 1) == 1;
                 bool isCauseLucky = (typeFlag & 0b100) == 0b100;
@@ -245,15 +251,27 @@ namespace BPSR_ACT_Plugin.src
                 var attacker = dmg.TopSummonerId != 0 ? dmg.TopSummonerId : dmg.AttackerUuid;
 
                 // Compose a human readable log similar to JS
-                string srcStr = UILabelHelper.GetAssociation(uuid: attacker);
-                string tgtStr = UILabelHelper.GetAssociation(uid: (long)targetUid, isTargetPlayer);
+                string srcStr = $"Unknown Entity ({attacker})";
+                if (attacker == UILabelHelper.CurrentUserUuid)
+                    srcStr = "YOU";
+                else if (IsUuidPlayer(attacker))
+                    srcStr = UILabelHelper.GetPlayer(attacker >> 16)?.Name ?? $"Unknown Player ({attacker})";
+                else if (IsUuidMonster(attacker))
+                    srcStr = UILabelHelper.GetMonster(attacker)?.Name ?? $"Unknown Monster ({attacker})";
+
+                string tgtStr = $"Unknown Entity ({targetUuid})";
+                if (targetUuid == UILabelHelper.CurrentUserUuid)
+                    tgtStr = "YOU";
+                else if (isTargetPlayer)
+                    tgtStr = UILabelHelper.GetPlayer(targetUuid >> 16)?.Name ?? $"Unknown Player ({targetUuid})";
+                else if (isTargetMonster)
+                    tgtStr = UILabelHelper.GetMonster(targetUuid)?.Name ?? $"Unknown Monster ({targetUuid})";
 
                 int swingType = isHeal ? ACTLogHandler.HealingSwingType : (int)SwingTypeEnum.NonMelee;
 
-                //TODO: Understand why true isCrits don't show up as crits
                 OnLogMasterSwing?.Invoke(new MasterSwing(swingType, isCrit, string.Join(",", extras), damage, DateTime.Now, 0, UILabelHelper.GetSkillName(skillId), srcStr, UILabelHelper.GetElementName(dmg.Property), tgtStr), isDead);
 
-                var log = $"[{actionType}] DS:{damageSource} {srcStr} {tgtStr} ID:{skillId} VAL:{damage} HPLSN:{hpLessenValue} EXT:{string.Join("|", extras)}";
+                var log = $"[{actionType}] DS:{damageSource} TGT: {tgtStr} ID:{skillId} VAL:{damage} HPLSN:{hpLessenValue} ELEM: {UILabelHelper.GetElementName(dmg.Property)} EXT:{string.Join("|", extras)}";
                 OnLogStatus?.Invoke(log);
 
             }
@@ -277,16 +295,21 @@ namespace BPSR_ACT_Plugin.src
         AttrName = 0x01,
         AttrId = 0x0a,
         AttrProfessionId = 0xdc,
-        AttrFightPoint = 0x272e,
-        AttrLevel = 0x2710,
-        AttrRankLevel = 0x274c,
-        AttrCri = 0x2b66,
-        AttrLucky = 0x2b7a,
-        AttrHp = 0x2c2e,
-        AttrMaxHp = 0x2c38,
-        AttrElementFlag = 0x646d6c,
-        AttrReductionLevel = 0x64696d,
-        AttrReduntionId = 0x6f6c65,
-        AttrEnergyFlag = 0x543cd3c6,
     }
+
+    internal enum EEntityType
+    {
+        EntMonster = 1,
+        EntChar = 10,
+    }
+
+    internal enum EDamageSource
+    {
+        Skill = 0,
+        Bullet = 1,
+        Buff = 2,
+        Fall = 3,
+        FakeBullet = 4,
+        Other = 100,
+    };
 }

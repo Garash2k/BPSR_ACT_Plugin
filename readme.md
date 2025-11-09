@@ -24,7 +24,6 @@ Part stockholm syndrome. But also, if you dig into it, ACT is more than just a D
 
 ## Req before ideally pubbing on github
 - Code quality: BPSRPacketHandler
-	- Improve the log string
 - Code quality: ACTLogHandler / UILabelHelper
 	- Centralized object for caching an entity's name, uuid, uid, player/monster and class.
 - Double checks longs vs ulongs
@@ -45,6 +44,7 @@ Part stockholm syndrome. But also, if you dig into it, ACT is more than just a D
 - Treat lucky procs the same way FFXIV_ACT_Plugin treats Direct Hits
 - Improve translation for monster names and skill names
 - i18n?
+- Confirm that handling disappear is not needed.
 
 # Shoutouts
 - [AdvancedCombatTracker](https://advancedcombattracker.com/) by EQAditu - (duh)

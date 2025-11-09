@@ -14,7 +14,6 @@ namespace BPSR_ACT_Plugin.src
         private static Dictionary<string, string> _map;
         private static object _lock = new object();
 
-        // Monster name map + lock
         private static Dictionary<string, string> _monsterMap;
         private static object _monsterLock = new object();
 
@@ -68,25 +67,15 @@ namespace BPSR_ACT_Plugin.src
             }
         }
 
-        /// <summary>
-        /// Return monster name for given id.
-        /// Looks up runtime associations first, then loads `tables/monster_names_en.json`.
-        /// </summary>
         public static string GetMonsterName(int id)
         {
-            // Check runtime associations first (overrides)
-            if (_ID_Name_Association.TryGetValue(id, out var assoc))
-            {
-                return assoc;
-            }
-
             EnsureMonsterNameLoaded();
             if (_monsterMap != null && _monsterMap.TryGetValue(id.ToString(), out var name))
             {
                 return name;
             }
 
-            return $"Unknown Monster ({id})";
+            return $"Unknown Monster Name ({id})";
         }
 
         private static void EnsureMonsterNameLoaded()
@@ -177,34 +166,76 @@ namespace BPSR_ACT_Plugin.src
             Count = 9,
         }
 
-        private static Dictionary<long, string> _ID_Name_Association = new Dictionary<long, string>();
-
         public static long CurrentUserUuid { get; internal set; } = 0;
 
-        public static void AddAssociation(long id, string name)
+        private static Dictionary<long, Player> _players = new Dictionary<long, Player>();
+        private static Player GetOrCreatePlayer(long uid)
         {
-            if (!_ID_Name_Association.ContainsKey(id))
+            Player c;
+            if (_players.TryGetValue(uid, out c))
             {
-                _ID_Name_Association.Add(id, name);
+                return c;
             }
+
+            c = new Player()
+            {
+                Uid = uid
+            };
+            _players.Add(uid, c);
+            return c;
+        }
+        internal static void AddUpdatePlayerName(long uid, string name)
+        {
+            var c = GetOrCreatePlayer(uid);
+            c.Name = name;
+        }
+        internal static void AddUpdatePlayerClass(long uid, int classID)
+        {
+            var c = GetOrCreatePlayer(uid);
+            c.Class = classID;
+        }
+        internal static Player GetPlayer(long uid)
+        {
+            return _players[uid];
         }
 
-        public static string GetAssociation(long uuid)
+        private static Dictionary<long, Monster> _monsters = new Dictionary<long, Monster>();
+        private static Monster GetOrCreatemonster(long uuid)
         {
-            return GetAssociation(uuid >> 16, BPSRPacketHandler.IsUuidPlayer((ulong)uuid));
-        }
+            Monster c;
+            if (_monsters.TryGetValue(uuid, out c))
+            {
+                return c;
+            }
 
-        public static string GetAssociation(long uid, bool isPlayer)
-        {
-            if (CurrentUserUuid >> 16 == uid)
+            c = new Monster()
             {
-                return "YOU";
-            }
-            if (_ID_Name_Association.TryGetValue(uid, out var name))
-            {
-                return name;
-            }
-            return $"Unknown {(isPlayer ? "Player" : "Monster")} ({uid})";
+                Uuid = uuid
+            };
+            _monsters.Add(uuid, c);
+            return c;
         }
+        internal static void AddUpdateMonsterName(long uuid, string name)
+        {
+            var c = GetOrCreatemonster(uuid);
+            c.Name = name;
+        }
+        internal static Monster GetMonster(long uuid)
+        {
+            return _monsters[uuid];
+        }
+    }
+
+    internal class Player
+    {
+        public long Uid;
+        public string Name;
+        public int Class;
+    }
+
+    internal class Monster
+    {
+        public long Uuid;
+        public string Name;
     }
 }
