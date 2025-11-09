@@ -196,6 +196,8 @@ namespace BPSR_ACT_Plugin.src
         }
         internal static Player GetPlayer(long uid)
         {
+            if (!_players.ContainsKey(uid))
+                return null;
             return _players[uid];
         }
 
@@ -222,7 +224,9 @@ namespace BPSR_ACT_Plugin.src
         }
         internal static Monster GetMonster(long uuid)
         {
-            return _monsters[uuid];
+            if (!_monsters.ContainsKey(uuid))
+                return null;
+           return _monsters[uuid];
         }
     }
 

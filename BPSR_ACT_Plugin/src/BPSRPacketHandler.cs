@@ -210,47 +210,25 @@ namespace BPSR_ACT_Plugin.src
 
             try
             {
-                //TODO: 2nd code review pass
-                int skillId = 0;
-                try { skillId = dmg.OwnerId; } catch { /* ignore */ }
-
-                long value = 0;
-                long luckyValue = 0;
-                long hpLessenValue = 0;
-                try { value = dmg.Value; } catch { }
-                try { luckyValue = dmg.LuckyValue; } catch { }
-                try { hpLessenValue = dmg.HpLessenValue; } catch { }
-
                 long damage = 0;
-                if (value > 0)
-                    damage = value;
-                else if (luckyValue > 0)
-                    damage = luckyValue;
+                if (dmg.Value > 0)
+                    damage = dmg.Value;
+                else if (dmg.LuckyValue > 0)
+                    damage = dmg.LuckyValue;
 
-                int typeFlag = 0;
-                try { typeFlag = dmg.TypeFlag; } catch { }
-                bool isDead = false;
-                try { isDead = Convert.ToBoolean(dmg.IsDead); } catch { }
-                EDamageSource damageSource = 0;
-                try { damageSource = (EDamageSource)dmg.DamageSource; } catch { }
+                bool isCrit = (dmg.TypeFlag & 1) == 1;
+                bool isCauseLucky = (dmg.TypeFlag & 0b100) == 0b100;
 
-                bool isCrit = (typeFlag & 1) == 1;
-                bool isCauseLucky = (typeFlag & 0b100) == 0b100;
-                //bool isLucky = luckyValue != 0;
-
-                bool isHeal = false;
-                try { isHeal = dmg.Type == (int)EDamageType.Heal; } catch { }
-
-                var actionType = isHeal ? "HEAL" : "DMG";
                 var extras = new List<string>();
                 if (isCrit) extras.Add("Crit");
-                //if (isLucky) extras.Add("Lucky");
                 if (isCauseLucky) extras.Add("CauseLucky");
                 if (extras.Count == 0) extras.Add("Normal");
 
+                bool isHeal = dmg.Type == (int)EDamageType.Heal;
+                int swingType = isHeal ? ACTLogHandler.HealingSwingType : (int)SwingTypeEnum.NonMelee;
+
                 var attacker = dmg.TopSummonerId != 0 ? dmg.TopSummonerId : dmg.AttackerUuid;
 
-                // Compose a human readable log similar to JS
                 string srcStr = $"Unknown Entity ({attacker})";
                 if (attacker == UILabelHelper.CurrentUserUuid)
                     srcStr = "YOU";
@@ -267,13 +245,21 @@ namespace BPSR_ACT_Plugin.src
                 else if (isTargetMonster)
                     tgtStr = UILabelHelper.GetMonster(targetUuid)?.Name ?? $"Unknown Monster ({targetUuid})";
 
-                int swingType = isHeal ? ACTLogHandler.HealingSwingType : (int)SwingTypeEnum.NonMelee;
+                OnLogMasterSwing?.Invoke(
+                    new MasterSwing(
+                        swingType,
+                        isCrit,
+                        string.Join(",", extras),
+                        damage,
+                        DateTime.Now,
+                        0,
+                        UILabelHelper.GetSkillName(dmg.OwnerId),
+                        srcStr,
+                        UILabelHelper.GetElementName(dmg.Property),
+                        tgtStr),
+                    dmg.IsDead);
 
-                OnLogMasterSwing?.Invoke(new MasterSwing(swingType, isCrit, string.Join(",", extras), damage, DateTime.Now, 0, UILabelHelper.GetSkillName(skillId), srcStr, UILabelHelper.GetElementName(dmg.Property), tgtStr), isDead);
-
-                var log = $"[{actionType}] DS:{damageSource} TGT: {tgtStr} ID:{skillId} VAL:{damage} HPLSN:{hpLessenValue} ELEM: {UILabelHelper.GetElementName(dmg.Property)} EXT:{string.Join("|", extras)}";
-                OnLogStatus?.Invoke(log);
-
+                OnLogStatus?.Invoke($"[{(isHeal ? "HEAL" : "DMG")}] DS:{(EDamageSource)dmg.DamageSource} TGT: {tgtStr} ID:{dmg.OwnerId} VAL:{damage} HPLSN:{dmg.HpLessenValue} ELEM: {UILabelHelper.GetElementName(dmg.Property)} EXT:{string.Join(" | ", extras)}");
             }
             catch (Exception ex)
             {
