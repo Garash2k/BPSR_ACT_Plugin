@@ -25,7 +25,6 @@ Part stockholm syndrome. But also, if you dig into it, ACT is more than just a D
 ## Req before ideally pubbing on github
 - Code quality: BPSRPacketHandler
 - Code quality: ACTLogHandler / UILabelHelper
-- Double checks longs vs ulongs
 - Make sure all unexpected catches are logged
 - Use an ILogger abstraction instead of Action<string>
 - Better autodetection + make a user parameter for device selection
