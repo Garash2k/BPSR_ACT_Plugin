@@ -32,6 +32,12 @@ namespace BPSR_ACT_Plugin.src
 
         public static void LogMasterSwing(MasterSwing masterSwing, bool isDead)
         {
+            if (!ActGlobals.oFormActMain.InCombat && masterSwing.SwingType == HealingSwingType)
+            {
+                //Do not start combat if it's a healing swing outside of combat
+                return;
+            }
+
             if (ActGlobals.oFormActMain.SetEncounter(DateTime.Now, masterSwing.Attacker, masterSwing.Victim))
             {
                 if (!string.IsNullOrEmpty(ActGlobals.oFormActMain.ActiveZone.ActiveEncounter.Title))
