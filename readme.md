@@ -23,7 +23,6 @@ Part stockholm syndrome. But also, if you dig into it, ACT is more than just a D
 # TODOs:
 
 ## Req before ideally pubbing on github
-- Code quality: ACTLogHandler / UILabelHelper
 - Make sure all unexpected catches are logged
 - Use an ILogger abstraction instead of Action<string>
 - Better autodetection + make a user parameter for device selection
@@ -39,6 +38,7 @@ Part stockholm syndrome. But also, if you dig into it, ACT is more than just a D
 - Show classes&specs in ACT (Turns out the Job column isn't vanilla, it gets added by FFXIV_ACT_Plugin)
 - Actually handle zones and not have it just be Blue Protocol: Star Resonnance
 - Treat lucky procs the same way FFXIV_ACT_Plugin treats Direct Hits
+- Update names in act if they're found
 - Improve translation for monster names and skill names
 - i18n?
 - Confirm that handling disappear is not needed.

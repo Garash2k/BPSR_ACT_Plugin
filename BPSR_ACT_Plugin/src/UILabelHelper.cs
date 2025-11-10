@@ -20,7 +20,8 @@ namespace BPSR_ACT_Plugin.src
         public static string GetSkillName(int id)
         {
             EnsureSkillNameLoaded();
-            if (_map != null && _map.TryGetValue($"{id}", out var v)) return v;
+            if (_map != null && _map.TryGetValue($"{id}", out var skillName))
+                return skillName;
             return $"Missing Skill ({id})";
         }
 
@@ -36,28 +37,13 @@ namespace BPSR_ACT_Plugin.src
 
                     string chosen = $@"{ActGlobals.oFormActMain.AppDataFolder}\Plugins\BPSR_ACT_Plugin\tables\skill_names_en.json";
 
-                    if (!string.IsNullOrEmpty(chosen) && File.Exists(chosen))
+                    string json = File.ReadAllText(chosen, Encoding.UTF8);
+                    var jss = new JavaScriptSerializer();
+                    var obj = jss.Deserialize<Dictionary<string, string>>(json);
+                    foreach (var kv in obj)
                     {
-                        string json = File.ReadAllText(chosen, Encoding.UTF8);
-                        // Use JavaScriptSerializer from System.Web.Extensions (available in .NET 4.8)
-                        try
-                        {
-                            var jss = new JavaScriptSerializer();
-                            var obj = jss.Deserialize<Dictionary<string, string>>(json);
-                            if (obj != null)
-                            {
-                                foreach (var kv in obj)
-                                {
-                                    if (!map.ContainsKey(kv.Key)) map[kv.Key] = kv.Value;
-                                }
-                            }
-                        }
-                        catch
-                        {
-                            // If deserialization fails, leave map empty
-                        }
+                        if (!map.ContainsKey(kv.Key)) map[kv.Key] = kv.Value;
                     }
-
                     _map = map;
                 }
                 catch
@@ -70,11 +56,8 @@ namespace BPSR_ACT_Plugin.src
         public static string GetMonsterName(int id)
         {
             EnsureMonsterNameLoaded();
-            if (_monsterMap != null && _monsterMap.TryGetValue(id.ToString(), out var name))
-            {
-                return name;
-            }
-
+            if (_monsterMap != null && _monsterMap.TryGetValue(id.ToString(), out var monsterName))
+                return monsterName;
             return $"Unknown Monster Name ({id})";
         }
 
@@ -88,30 +71,14 @@ namespace BPSR_ACT_Plugin.src
                 {
                     var map = new Dictionary<string, string>();
 
-                    // Look for the table in the application folder under "tables"
-                    string baseDir = AppDomain.CurrentDomain.BaseDirectory ?? Environment.CurrentDirectory;
-
                     string chosen = $@"{ActGlobals.oFormActMain.AppDataFolder}\Plugins\BPSR_ACT_Plugin\tables\monster_names_en.json";
 
-                    if (File.Exists(chosen))
+                    string json = File.ReadAllText(chosen, Encoding.UTF8);
+                    var jss = new JavaScriptSerializer();
+                    var obj = jss.Deserialize<Dictionary<string, string>>(json);
+                    foreach (var kv in obj)
                     {
-                        string json = File.ReadAllText(chosen, Encoding.UTF8);
-                        try
-                        {
-                            var jss = new JavaScriptSerializer();
-                            var obj = jss.Deserialize<Dictionary<string, string>>(json);
-                            if (obj != null)
-                            {
-                                foreach (var kv in obj)
-                                {
-                                    if (!map.ContainsKey(kv.Key)) map[kv.Key] = kv.Value;
-                                }
-                            }
-                        }
-                        catch
-                        {
-                            // ignore deserialization errors
-                        }
+                        if (!map.ContainsKey(kv.Key)) map[kv.Key] = kv.Value;
                     }
 
                     _monsterMap = map;
@@ -128,28 +95,28 @@ namespace BPSR_ACT_Plugin.src
         private static Dictionary<long, Player> _players = new Dictionary<long, Player>();
         private static Player GetOrCreatePlayer(long uid)
         {
-            Player c;
-            if (_players.TryGetValue(uid, out c))
-            {
-                return c;
-            }
+            Player player;
+            if (_players.TryGetValue(uid, out player))
+                return player;
 
-            c = new Player()
+            player = new Player()
             {
                 Uid = uid
             };
-            _players.Add(uid, c);
-            return c;
+            _players.Add(uid, player);
+            return player;
         }
         internal static void AddUpdatePlayerName(long uid, string name)
         {
             var c = GetOrCreatePlayer(uid);
             c.Name = name;
+            //TODO: Update names in act if they're found
         }
         internal static void AddUpdatePlayerClass(long uid, int classID)
         {
             var c = GetOrCreatePlayer(uid);
             c.Class = classID;
+            //TODO: Update names in act if they're found
         }
         internal static Player GetPlayer(long uid)
         {
@@ -161,23 +128,22 @@ namespace BPSR_ACT_Plugin.src
         private static Dictionary<long, Monster> _monsters = new Dictionary<long, Monster>();
         private static Monster GetOrCreatemonster(long uuid)
         {
-            Monster c;
-            if (_monsters.TryGetValue(uuid, out c))
-            {
-                return c;
-            }
+            Monster monster;
+            if (_monsters.TryGetValue(uuid, out monster))
+                return monster;
 
-            c = new Monster()
+            monster = new Monster()
             {
                 Uuid = uuid
             };
-            _monsters.Add(uuid, c);
-            return c;
+            _monsters.Add(uuid, monster);
+            return monster;
         }
         internal static void AddUpdateMonsterName(long uuid, string name)
         {
             var c = GetOrCreatemonster(uuid);
             c.Name = name;
+            //TODO: Update names in act if they're found
         }
         internal static Monster GetMonster(long uuid)
         {
